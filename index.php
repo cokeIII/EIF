@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <?php require_once "pages/conf.php";?>
+  <?php require_once "pages/login/checkLogin.php"?>
+ 
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>EIF</title>
