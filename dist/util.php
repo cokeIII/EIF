@@ -8,9 +8,14 @@
         }
         return $r;
     }
-
     function EC3($provinceName){
         $name = array("ชลบุรี" => true ,"ระยอง" => true,"ฉะเชิงเทรา" => true);
         return isset($name[$provinceName]);                     
+    }
+
+    function genOption($opt){
+        foreach ($opt as $key => $value) {
+            echo '<option value="'.$value.'">'.$value.'</option>';
+        }
     }
 ?>

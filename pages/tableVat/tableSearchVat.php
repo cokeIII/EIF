@@ -52,22 +52,24 @@ $json.='<div id="searchVat" class="">
                 <td>ชื่อสถานประกอบการ</td>  
                 <td>รหัสไปรษณีย์</td>  
                 <td>วันที่จดทะเบียน</td>  
+                <td>ที่อยู่</td>   
             </tr>
         </thead>
         <tbody>';
-
+        
         $No = 1;
         foreach($dataBusi as $key=>$value){
             if(EC3($value['vProvince'])){
                         
             $json.='<tr id="rowData" val="'.$value['vNID'].'">
-                <td>'.$No. '</td> 
-                <td>'.$value['vNID'].'</td>  
-                <td>' .setBranchNumber($value['vBranchNumber']). '</td>  
-                <td>' .$value['vtitleName']." ".$value['vName']." ".$value['vSurname']. '</td>
-                <td>' .$value['vBranchName']. '</td>  
-                <td>' .$value['vPostCode']. '</td>  
-                <td>' .$value['vBusinessFirstDate']. '</td>  
+                <td key="no">'.$No. '</td> 
+                <td key="vNID" >'.$value['vNID'].'</td>  
+                <td key="vBranchNumber" >' .setBranchNumber($value['vBranchNumber']). '</td>  
+                <td key="vName" >' .$value['vtitleName']." ".$value['vName']." ".$value['vSurname']. '</td>
+                <td key="vBranchName">' .$value['vBranchName']. '</td>  
+                <td key="vPostCode">' .$value['vPostCode']. '</td>  
+                <td key="vBusinessFirstDate">' .$value['vBusinessFirstDate']. '</td>  
+                <td key="vaddress">' .$value['vHouseNumber'].', '.$value['vMooNumber'].', '.$value['vSoiName'].', '.$value['vThambol'].', '.$value['vAmphur'].', '.$value['vProvince'].'</td>  
             </tr>';
 
         $No++; 

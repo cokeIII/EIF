@@ -17,9 +17,9 @@ if(isset($_POST['submit'])){
     $sql = "INSERT INTO project (project_name, reason, maingoal, persons, start_duration,end_duration,locations,budget,product,indicator)VALUES ( '$project_name', '$reason',' $maingoal','$persons','$start_duration','$end_duration','$locations','$budget','$product','$indicator')";
 
     if ($conn->query($sql) === TRUE) {
-    echo true;
+        echo json_encode(true);
     } else {
-    echo false;
+        echo json_encode(false);
     }
 }
 ?>
