@@ -1,3 +1,5 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<?php require_once "../conf.php";?>
 <div class="content-header">
     <div class="container-fluid">
     <div class="row mb-2">

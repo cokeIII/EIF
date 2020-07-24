@@ -2,6 +2,13 @@
 <html>
 <head>
   <?php require_once "../conf.php";?>
+  <?php 
+    if(isset($_SESSION["login"])){
+      if($_SESSION["login"]==false){
+        $logClass = "border border-danger";
+      }
+    }
+  ?>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title><?php echo $title; ?></title>
@@ -17,6 +24,7 @@
   <!-- Theme style -->
   <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
   <link rel="stylesheet" href="../../dist/css/public.css">
+  <link rel="stylesheet" href="../../dist/css/login.css">
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 </head>
@@ -26,24 +34,29 @@
     <a href="#"><b class="h-txt">EIF</b></a>
   </div>
   <!-- /.login-logo -->
-  <div class="card">
+    <?php if(isset($_SESSION["login"]) && $_SESSION["login"] == false){ 
+      echo '<div class="alert alert-danger alert-dismissible">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong></strong> ชื่อผู้ใช้งาน หรือ รหัสผ่าน ไม่ถูกต้อง <br>กรุณาลองใหม่อีกครั้ง
+      </div>';
+    }?>
     <div class="card-body login-card-body">
       <p class="login-box-msg">Sign in to start your session</p>
 
-      <form action="../../index3.html" method="post">
+      <form action="dbLogin.php" method="post">
         <div class="input-group mb-3">
-          <input type="email" class="form-control" placeholder="เลขประจำตัวผู้เสียภาษี">
+          <input type="text" class="form-control  <?php echo $logClass?>" name="username" placeholder="เลขประจำตัวผู้เสียภาษี">
           <div class="input-group-append">
             <div class="input-group-text">
-              <!-- <span class="fas fa-envelope"></span> -->
+              <span class="fas fas fa-user"></span>
             </div>
           </div>
         </div>
         <div class="input-group mb-3">
-          <input type="password" class="form-control" placeholder="รหัสผ่าน">
+          <input type="password" name="password" class="form-control <?php echo $logClass?>" placeholder="รหัสผ่าน">
           <div class="input-group-append">
             <div class="input-group-text">
-              <!-- <span class="fas fa-lock"></span> -->
+              <span class="fas fa-lock"></span>
             </div>
           </div>
         </div>
@@ -56,10 +69,10 @@
                 Remember Me
               </label>
             </div> -->
-          </div>
+          </div>         
           <!-- /.col -->
           <div class="col-4">
-            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+            <button type="submit" name="submit" class="btn btn-primary btn-block">Sign In</button>
           </div>
           <!-- /.col -->
         </div>
@@ -87,3 +100,4 @@
 
 </body>
 </html>
+<?php unset($_SESSION["login"]);?>

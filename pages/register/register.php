@@ -7,7 +7,7 @@
     <?php require_once "../connect.php";?>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>AdminLTE 3 | Registration Page</title>
+  <title><?php echo $title; ?></title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -32,7 +32,7 @@
   </div>
 
   <div class="card">
-    <div class="card-body ">
+    <div class="card-body " id="regisContent">
       <p class="login-box-msg">Register a new membership</p>
 
       <form action="" method="post" id="formSearchVat" class="form mt-3">
@@ -109,8 +109,11 @@
 
                     <div class="form-group">
                         <label for="amount_emp" class="col-md-2 control-label">จำนวนพนักงาน</label>
-                        <div class="input-group col-md-1">
+                        <div class="input-group col-md-2">
                             <input type="text" class="form-control" required="" id="amount_emp" name="amount_emp"value="">
+                            <div class="input-group-addon">
+                                <i class="fa fa-asterisk ml-3" style="color:red;" aria-hidden="true"> บังคับ</i>
+                            </div>
                         </div>
                     </div>
 
@@ -246,6 +249,24 @@
                 </div>
             </form>                                
       </div>
+      <div class="box info-box collapse" id="formInsert">
+            <div class="box-header with-border">
+                <h3 class="box-title">แบบฟอร์มสำหรับกรอกข้อมูลสถานประกอบการ</h3>
+            </div>
+            <form method="post" class="form-horizontal" id="formRegister" action="">
+                <div class="box-body">
+                    <div class="form-group">
+                        <label for="business_vat" class="col-md-2 control-label">เลขประจำตัวผู้เสียภาษี</label>
+                        <div class="input-group col-md-5">
+                            <input type="hidden" name="vat_id" id="vat_id" value="">
+                            <input disabled type="text" class="form-control" required="" id="business_vat" name="business_vat"value="">
+                            <span class="input-group-btn">
+                            </span>
+                        </div>
+                    </div>
+            </form>                                
+      </div>
+
       <a href="../login/login.php" class="text-center">I already have a membership</a>
     </div>
     <!-- /.form-box -->
@@ -403,6 +424,7 @@
             success: function (data) {
                 if(data){
                     alert("เพิ่มข้อมูลสำเร็จ")
+                    $("#regisContent").html("")
                 } else {
                     alert("ERROR เกิดข้อผิดพลาด")
                 }
