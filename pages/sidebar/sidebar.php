@@ -29,7 +29,7 @@
         <li class="nav-item">
           <a href="#" class="nav-link active" >
             <i class="far fa-circle nav-icon"></i>
-            <p>ประโยชน์จาก EEC</p>
+            <p>10 อุตสาหกรรม</p>
           </a>
         </li>
         <li class="nav-item">

@@ -7,3 +7,20 @@
 .right{
     text-align: right;
 }
+.f-withe{
+    color: white !important;
+}
+.f-black{
+    color: black !important;
+}
+.bg-warningM{
+    background-color: rgb(255, 252, 52);
+}
+.bg-img{
+    /* background-image: url("../img/bg.jpg") !important; */
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    background-size: cover !important;
+    background-image: linear-gradient(to bottom, rgba(243, 239, 239, 0.719) 0%,rgba(253, 253, 253, 0.685) 100%), url("../img/bg.jpg")!important;
+}
+
