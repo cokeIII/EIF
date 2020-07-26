@@ -1,60 +1,73 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <?php require_once "../conf.php";?>
-    <?php require_once "../../dist/util.php";?>
-    <?php require_once "../../dist/sqlUtil.php";?>
-    <?php require_once "../connect.php";?>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title><?php echo $title; ?></title>
-  <!-- Tell the browser to be responsive to screen width -->
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
-  <!-- Ionicons -->
-  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-  <!-- icheck bootstrap -->
-  <link rel="stylesheet" href="../../plugins/icheck-bootstrap/icheck-bootstrap.min.css">
-  <!-- Theme style -->
-  <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
-  <link rel="stylesheet" href="../../dist/css/register.css">
-  <link rel="stylesheet" href="../../dist/css/public.css">
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
-  <!-- Google Font: Source Sans Pro -->
-  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
-</head>
-<body class="hold-transition container bg-color">
-<div class="">
-  <div class="register-logo">
-    <a href="#"><b class="h-txt">EIF</b></a>
-  </div>
-
-  <div class="card">
-    <div class="card-body " id="regisContent">
-      <p class="login-box-msg">Register a new membership</p>
-
-      <form action="" method="post" id="formSearchVat" class="form mt-3">
-          <div class="form-group">
-              <label for="business_vat" class="col-md-2 control-label">ชื่อผู้ประกอบการฯ</label>
-              <div class="input-group col-md-5">
-                  <input  type="text" class="form-control" required="" id="business_name_search" name="business_vat"value="" placeholder="" minlength="3">
-                  <span class="input-group-btn ml-3">
-                      <button type="submit" id="btnSearchVat" class="btn btn-primary"><div class="fa fa-search mr-2"></div>ค้นหา</button>
-                  </span>
-              </div>
-          </div>
-          <hr class="hr"></hr>
-      </form>
-
-      <!-- tableSearchVat -->
-      <div id="tableSearchVat" class="mt-5" >
-          <div class="topic-search-vat mt-10">ค้นหาข้อมูลจากสรรพากร</div>
-          <div id="spinners" class="canter spinner loader collapse"></div>                            
+<!-- LOGIN -->
+<div class="modal fade" id="modal-login">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">เข้าสู่ระบบ</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
-      <!-- END tableSearchVat -->
-      <div class="box info-box collapse" id="formInsert">
+      <div class="modal-body">
+        <form role="form" action="pages/login/dbLogin.php" method="post" id="loginForm">
+          <div class="card-body">
+            <div class="form-group">
+              <label for="exampleInputEmail1">เลขประจำตัวผู้เสียภาษี</label>
+              <input type="tel" maxlength="13" name="username" class="form-control" id="username" placeholder="เลขประจำตัวผู้เสียภาษี 13 หลัก" required>
+            </div>
+            <div class="form-group">
+              <label for="exampleInputPassword1">รหัสผ่าน</label>
+              <input type="password" name="password" class="form-control" id="password" placeholder="">
+            </div>
+          </div>
+          <!-- /.card-body -->
+          <div class="card-footer">
+            <a href="#" class="text-center" id="register" data-toggle="modal" data-target="#modal-register">สมัครเข้าใช้งาน</a>
+            <button type="submit" name="submit" class="btn btn-primary float-sm-right color-menu">ตกลง</button>
+          </div>
+        </form>
+      </div>
+      <!-- <div class="modal-footer justify-content-between">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div> -->
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- END LOGIN -->
+<!-- REGISTER-->
+<div class="modal fade" id="modal-register">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">สมัครเข้าใช้งาน</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="" method="post" id="formSearchVat" class="form mt-3">
+            <div class="form-group">
+                <label for="business_vat" class="col-md-3 control-label">ชื่อผู้ประกอบการฯ</label>
+                <div class="input-group col-md-5">
+                    <input  type="text" class="form-control" required="" id="business_name_search" name="business_vat"value="" placeholder="" minlength="3">
+                    <span class="input-group-btn ml-3">
+                        <button type="submit" id="btnSearchVat" class="btn color-menu"><div class="fa fa-search mr-2"></div>ค้นหา</button>
+                    </span>
+                </div>
+            </div>
+            <hr class="hr"></hr>
+        </form>
+
+        <!-- tableSearchVat -->
+        <div id="tableSearchVat" class="mt-5" >
+            <div class="topic-search-vat mt-10">ค้นหาข้อมูลจากสรรพากร</div>
+            <div id="spinners" class="canter spinner loader collapse"></div>                            
+        </div>
+        <!-- END tableSearchVat -->
+        <div class="box info-box collapse" id="formInsert">
             <div class="box-header with-border">
                 <h3 class="box-title">แบบฟอร์มสำหรับกรอกข้อมูลสถานประกอบการ</h3>
             </div>
@@ -247,211 +260,16 @@
                     </div>
                 </div>
                 </div>
-            </form>                                
+            </form>   
+        </div>                             
       </div>
-      <div class="box info-box collapse" id="formInsert">
-            <div class="box-header with-border">
-                <h3 class="box-title">แบบฟอร์มสำหรับกรอกข้อมูลสถานประกอบการ</h3>
-            </div>
-            <form method="post" class="form-horizontal" id="formRegister" action="">
-                <div class="box-body">
-                    <div class="form-group">
-                        <label for="business_vat" class="col-md-2 control-label">เลขประจำตัวผู้เสียภาษี</label>
-                        <div class="input-group col-md-5">
-                            <input type="hidden" name="vat_id" id="vat_id" value="">
-                            <input disabled type="text" class="form-control" required="" id="business_vat" name="business_vat"value="">
-                            <span class="input-group-btn">
-                            </span>
-                        </div>
-                    </div>
-            </form>                                
-      </div>
-
-      <a href="../login/login.php" class="text-center">I already have a membership</a>
+      <!-- <div class="modal-footer justify-content-between">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div> -->
     </div>
-    <!-- /.form-box -->
-  </div><!-- /.card -->
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
 </div>
-<!-- /.register-box -->
-
-<!-- jQuery -->
-<script src="../../plugins/jquery/jquery.min.js"></script>
-<!-- Bootstrap 4 -->
-<script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- AdminLTE App -->
-<script src="../../dist/js/adminlte.min.js"></script>
-<script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
-
-</body>
-</html>
-<script>
-  $(document).ready(function(){
-    $("#formSearchVat").submit(function(e)  {
-      $("#tableSearchVat").html('<div class="topic-search-vat mt-10">ค้นหาข้อมูลจากสรรพากร</div><div id="spinners" class="canter spinner loader"></div>')
-      $("#spinners").show()
-      $("#formInsert").hide()
-      $("#tableSearchVat").show()
-      setEmpty()
-      e.preventDefault()
-      $.ajax({
-        type: 'post', 
-        dataType: "json",
-        url: '../tableVat/tableSearchVat.php',
-        data: {submit:"nameSearchVat", name: $("#business_name_search").val()},
-        success: function (data) {
-          $("#spinners").hide()
-          $("#tableSearchVat").html(data)
-          $('#busiTable').dataTable();            
-        },
-    })
-  }) 
-  var rowData = {}
-  $(document).on('change', '#province_id', function () {
-    $.ajax({
-        type: 'post', 
-        dataType: "json",
-        url: '../../dist/ajax.php',
-        data: {provinces: true, id: $(this).val()},
-        success: function (data) {
-            $("#district_id").html("")
-            $("#district_id").append(
-                    '<option id="district_id_list" > -- กรุณาเลือกอำเภอ/เขต -- </option>'
-                )
-
-            $.each( data, function( key, value ) {
-                $("#district_id").append(
-                    '<option value="'+value.id+'">'+value.name+'</option>'
-                )
-            });
-            $("#postcode").val("")
-            $("#subdistrict_id").html('<option id="subdistrict_id_list"> -- กรุณาเลือกตำบล -- </option>')
-        },
-    })
-
-  })
-  let zipCode
-  $(document).on('change', '#district_id', function () {
-    $.ajax({
-        type: 'post', 
-        dataType: "json",
-        url: '../../dist/ajax.php',
-        data: {district_id: true, id: $(this).val()},
-        success: function (data) {
-            $("#subdistrict_id").html("")
-            $("#subdistrict_id").append(
-                '<option id="subdistrict_id_list"> -- กรุณาเลือกตำบล -- </option>'
-            )
-
-            $.each( data, function( key, value ) {
-                $("#subdistrict_id").append(
-                    '<option zip="'+value.zip_code+'" value="'+value.id+'">'+value.name+'</option>'
-                )
-            });
-        },
-    })
-
-  })
-
-  $(document).on('change', '#subdistrict_id', function () {
-    $("#postcode").val($(this).val())
-  })
-
-
-  $(document).on('click', 'tr', function () {
-    $(this).find('td').each(function() {
-      var cellText = $(this).html()
-      rowData[$(this).attr("key")] = cellText
-    });
-    let vDate = rowData.vBusinessFirstDate.split('/')
-    let address = rowData.vaddress.split(',')
-    $("#business_vat").val(rowData.vNID)
-    $("#branch_number_vat").val(rowData.vBranchNumber)
-    $("#business_name").val(replaceStr(rowData.vName))
-    $("#registration_date").val(vDate[0]+"-"+vDate[1]+"-"+vDate[2])
-    $("#postcode").val(rowData.vPostCode)
-    $("#address_no").val(address[0]+" หมู่ "+address[1]+" ซอย "+address[2])
-    $("#province_id").find("option").each(function(){
-        if($(this).text() == address[5].replace(/ /g,"")){
-            $(this).attr("selected", true)
-        }
-    })
-    $("#district_id").find("option").each(function(){
-        if($(this).text() == address[4].replace(/ /g,"")){
-            $(this).attr("selected", true)
-        }
-    })
-    $("#subdistrict_id").find("option").each(function(){
-        if($(this).text() == address[3].replace(/ /g,"")){
-            $(this).attr("selected", true)
-        }
-    })
-    
-    $("#formInsert").show()
-    $("#tableSearchVat").hide()
-
-  });
-
-  $("#formRegister").submit(function(e){
-        e.preventDefault()
-        $.ajax({
-            type: 'post', 
-            dataType: "json",
-            url: 'dbRegister.php',
-            data: {
-                submit:"formRegister", 
-                business_vat: $("#business_vat").val(),
-                branch_number_vat: $("#branch_number_vat").val(),
-                business_name: $("#business_name").val(),
-                business_branch: $("#business_branch").val(),
-                business_size: $("#business_size").val(),
-                amount_emp: $("#amount_emp").val(),
-                job_description: $("#job_description").val(),
-                province_id: $("#province_id").val(),
-                district_id: $("#district_id").val(),
-                subdistrict_id: $("#subdistrict_id").val(),
-                postcode: $("#postcode").val(),
-                house_code: $("#house_code").val(),
-                address_no: $("#address_no").val(),
-                road: $("#road").val(),
-                land: $("#land").val(),
-                location: $("#location").val(),
-                email: $("#email").val(),
-                business_phone: $("#business_phone").val(),
-                registration_date: $("#registration_date").val(),
-                capital: $("#capital").val(),
-                tax_break: $("#tax_break").val(),
-            },
-            success: function (data) {
-                if(data){
-                    alert("เพิ่มข้อมูลสำเร็จ")
-                    $("#regisContent").html("")
-                } else {
-                    alert("ERROR เกิดข้อผิดพลาด")
-                }
-            },
-        })
-    }) 
-
-
-  function replaceStr($str){
-    return $str.replace(/-/g, "")
-  }
-  function setEmpty() {
-    $("#business_vat").val("")
-    $("#branch_number_vat").val("")
-    $("#business_name").val("")
-    $("#business_branch").val("")
-    $("#amount_emp").val("")
-    $("#job_description").val("")
-    $("#house_code").val("")
-    $("#address_no").val("")
-    $("#road").val("")
-    $("#land").val("")
-    $("#location").val("")
-    $("#email").val()
-    $("#business_phone").val("")
-    $("#registration_date").val("")
-    $("#capital").val("")
-  }
-})
-</script>
+<!-- END REGISTER -->

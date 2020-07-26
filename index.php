@@ -3,7 +3,9 @@
 <head>
   <?php 
     require_once "pages/conf.php";
-    $_SESSION["status"] = "mormal";
+    require_once "dist/util.php";
+    require_once "dist/sqlUtil.php";
+    require_once "pages/connect.php";    
   ?> 
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -24,6 +26,7 @@
   <link rel="stylesheet" href="dist/css/adminlte.min.css">
   <!-- Theme style index-->
   <link rel="stylesheet" href="dist/css/index.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
   <!-- overlayScrollbars -->
   <link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
   <!-- Daterange picker -->
@@ -53,9 +56,9 @@
       </li>
       <li class="nav-item">
         <?php if(isset($_SESSION["login"]) && $_SESSION["login"]==true){?>
-          <a class="nav-link" href="pages/login/logout.php">LOGOUT</a>
+          <a class="nav-link" href="pages/login/logout.php">ออกจากระบบ</a>
         <?php } else {?>
-          <a class="nav-link" href="#"  data-toggle="modal" data-target="#modal-default">LOGIN</a>
+          <a class="nav-link" href="#"  data-toggle="modal" data-target="#modal-login">เข้าสู่ระบบ</a>
         <?php }?>
       </li>
     </ul>
@@ -82,6 +85,8 @@
           } else {
             require_once "pages/sidebar/sidebar.php";
           }
+        }  else {
+          require_once "pages/sidebar/sidebar.php";
         }
       ?>
     <!-- /.sidebar -->
@@ -109,7 +114,7 @@
     <!-- /.content-header -->
   
     <!-- Content Header (Page header) -->
-    <section class="content">
+    <section class="content" id="">
       <div class="container-fluid">
         <div class="row">
           <div class="col-lg-3 col-6">
@@ -170,7 +175,7 @@
           <!-- ./col -->
         </div>
       </div>
-    </section>
+    
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-6">
@@ -194,26 +199,26 @@
         </div>
         <div class="col-md-6">
           <!-- solid sales graph -->
-          <div class="card color-sidebar">
+          <div class="card ">
             <div class="card-header border-0">
               <h3 class="card-title f-withe">
                 <!-- <i class="fas fa-th mr-1"></i> -->
                 <div class="row">
-                  <div class="input-group input-group-sm">
+                  <div class="input-group input-group-sm f-black">
                     ผลการประเมินโครงการ
                     <input type="text" class="form-control ml-2" placeholder="ชื่อโครงการ">
                     <span class="input-group-append">
-                      <button type="button" class="btn color-menu btn-flat">Go!</button>
+                      <button type="button" class="btn color-sidebar f-withe btn-flat">Go!</button>
                     </span>
                   </div>
                 </div>
               </h3>
 
               <div class="card-tools">
-                <button type="button" class="btn color-sidebar btn-sm" data-card-widget="collapse">
+                <button type="button" class="btn btn-sm" data-card-widget="collapse">
                   <i class="fas fa-minus"></i>
                 </button>
-                <button type="button" class="btn color-sidebar btn-sm" data-card-widget="remove">
+                <button type="button" class="btn btn-sm" data-card-widget="remove">
                   <i class="fas fa-times"></i>
                 </button>
               </div>
@@ -230,6 +235,7 @@
         </div>
       </div>
     </div>
+    </section>
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
@@ -244,42 +250,8 @@
   <!-- /.control-sidebar -->
 </div>
 <!-- ./wrapper -->
-<div class="modal fade" id="modal-default">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title">Login</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form role="form" id="quickForm">
-          <div class="card-body">
-            <div class="form-group">
-              <label for="exampleInputEmail1">เลขประจำตัวผู้เสียภาษี</label>
-              <input type="tel" maxlength="13" minlength="13" pattern="[0-9]{13}" name="username" class="form-control" id="username" placeholder="13 หลัก" required>
-            </div>
-            <div class="form-group">
-              <label for="exampleInputPassword1">รหัสผ่าน</label>
-              <input type="password" name="password" class="form-control" id="password" placeholder="">
-            </div>
-          </div>
-          <!-- /.card-body -->
-          <div class="card-footer">
-            <button type="submit" class="btn btn-primary float-sm-right color-menu">Login</button>
-          </div>
-        </form>
-      </div>
-      <!-- <div class="modal-footer justify-content-between">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div> -->
-    </div>
-    <!-- /.modal-content -->
-  </div>
-  <!-- /.modal-dialog -->
-</div>
+<?php require_once "pages/modal/modalIndex.php"; ?>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 <!-- jQuery -->
 <script src="plugins/jquery/jquery.min.js"></script>
 <!-- jQuery UI 1.11.4 -->
@@ -309,6 +281,7 @@
 <!-- overlayScrollbars -->
 <script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
 <!-- AdminLTE App -->
+<script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
 <script src="dist/js/adminlte.js"></script>
 <script src="dist/js/pages/index.js"></script>
 </body>
@@ -359,6 +332,7 @@ $(function () {
     })
 })
 // // Sales graph chart
+let colorline = "#273c49"
 var salesGraphChartCanvas = $('#line-chart').get(0).getContext('2d');
 //$('#revenue-chart').get(0).getContext('2d');
 
@@ -371,11 +345,11 @@ var salesGraphChartData = {
       borderWidth         : 2,
       lineTension         : 0,
       spanGaps : true,
-      borderColor         : '#efefef',
+      borderColor         : colorline,
       pointRadius         : 3,
       pointHoverRadius    : 7,
-      pointColor          : '#efefef',
-      pointBackgroundColor: '#efefef',
+      pointColor          : colorline,
+      pointBackgroundColor: colorline,
       data                : [30, 60, 20, 70, 80, 50, 40, 30, 40, 50]
     }
   ]
@@ -390,22 +364,22 @@ var salesGraphChartOptions = {
   scales: {
     xAxes: [{
       ticks : {
-        fontColor: '#efefef',
+        fontColor: colorline,
       },
       gridLines : {
         display : false,
-        color: '#efefef',
+        color: colorline,
         drawBorder: false,
       }
     }],
     yAxes: [{
       ticks : {
         stepSize: 10,
-        fontColor: '#efefef',
+        fontColor: colorline,
       },
       gridLines : {
         display : true,
-        color: '#efefef',
+        color: colorline,
         drawBorder: false,
       }
     }]

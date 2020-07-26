@@ -1,8 +1,7 @@
 <?php
     require_once "../../dist/nusoap/nusoap.php";
     require_once "../../dist/util.php";
-
-    session_start();
+    
     $wsdl = 'https://rdws.rd.go.th/serviceRD3/vatserviceRD3.asmx?wsdl';
     header('Content-Type: text/html; charset=utf-8');
     $soapclient = new nusoap_client($wsdl, true);
@@ -36,9 +35,6 @@
             }
         }
     }
-
-$_SESSION["dataBusi"] = $dataBusi;
-// print_r($_SESSION["dataBusi"]);
 $json = '';
 $json.='<div id="searchVat" class="">
     <h4 class="center-txt">เลือกสถาณประกอบการ</h4>

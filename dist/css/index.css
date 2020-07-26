@@ -2,7 +2,7 @@
     background-color: rgb(238, 105, 56) !important;
 }
 .color-sidebar{
-    background-color: rgb(7, 61, 87) !important;
+    background-color: rgb(39, 60, 73) !important;
 }
 .right{
     text-align: right;
@@ -17,10 +17,43 @@
     background-color: rgb(255, 252, 52);
 }
 .bg-img{
-    /* background-image: url("../img/bg.jpg") !important; */
     background-position: center !important;
     background-repeat: no-repeat !important;
     background-size: cover !important;
     background-image: linear-gradient(to bottom, rgba(243, 239, 239, 0.719) 0%,rgba(253, 253, 253, 0.685) 100%), url("../img/bg.jpg")!important;
 }
+.topic-search-vat{
+    font-size: 38px;
+    /* margin-left: 35%; */
+    text-align: center;
+}
 
+.spinner{
+    font-size: 38px;
+    margin: 5% 0% 0% 50%;
+    width: 60px !important;
+    height: 60px !important;
+}
+
+.loader {
+    border: 16px solid #f3f3f3; /* Light grey */
+    border-top: 16px solid rgb(238, 105, 56); /* Blue */
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 2s linear infinite;
+  }
+  
+@keyframes spin {
+    0% { transform: rotate(0deg); ;}
+    100% { transform: rotate(360deg); ;}
+}
+
+.center-txt{
+    text-align: center;
+}
+.eec-img{
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    background-size: 250px 350px !important;
+}

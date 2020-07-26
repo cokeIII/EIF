@@ -5,6 +5,7 @@ if(isset($_POST["submit"])){
     if($_POST["username"] == "Admin" && $_POST["password"]=="Admin"){
         $_SESSION["login"] = true;
         $_SESSION["username"] = "Admin";
+        $_SESSION["status"] = "admin";
         header("Location: ../../index.php");
     } else {
         header("Location: login.php");
