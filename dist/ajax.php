@@ -37,4 +37,24 @@
         } 
         echo json_encode($json_result);
     }
+    if(isset($_POST["loginBranch"])){
+        $id = $_POST["id"];
+        $sql = "select branch_no from business where id ='$id'";
+        $result = $conn->query($sql);
+        if ($result->num_rows > 0) {
+            while($row = $result->fetch_assoc()) {
+
+                $json_result[] = [
+                    'branch_no'=>$row['branch_no'],
+                ];
+
+            }
+            $json_result["status"] = true;
+
+        } else {
+            $json_result["status"] = false;
+        }
+        echo json_encode($json_result);
+
+    }
 ?>

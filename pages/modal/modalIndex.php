@@ -11,19 +11,28 @@
       <div class="modal-body">
         <form role="form" action="pages/login/dbLogin.php" method="post" id="loginForm">
           <div class="card-body">
-            <div class="form-group">
+            <div class="form-group" id="user">
               <label for="exampleInputEmail1">เลขประจำตัวผู้เสียภาษี</label>
               <input type="tel" maxlength="13" name="username" class="form-control" id="username" placeholder="เลขประจำตัวผู้เสียภาษี 13 หลัก" required>
             </div>
-            <div class="form-group">
+            <div class="form-group collapse" id="branchSelect">
+              <label for="branch_no">เลือกสาขา</label>
+              <select class="form-control" name="branch_no" id="branchNo">
+              </select>
+            </div>
+            <div class="form-group collapse" id="pass">
               <label for="exampleInputPassword1">รหัสผ่าน</label>
-              <input type="password" name="password" class="form-control" id="password" placeholder="">
+              <input type="password" name="password" class="form-control" id="password" placeholder="" pattern=".{8,}">
             </div>
           </div>
           <!-- /.card-body -->
           <div class="card-footer">
             <a href="#" class="text-center" id="register" data-toggle="modal" data-target="#modal-register">สมัครเข้าใช้งาน</a>
-            <button type="submit" name="submit" class="btn btn-primary float-sm-right color-menu">ตกลง</button>
+            <div class="row float-sm-right">
+                <a class="float-sm-right link mr-2 collapse" href="#" id="backBtn">ย้อนกลับ</a>
+                <button type="button" name="next-btn" id="nextBtn" class="btn btn-primary  color-menu">ถัดไป</button>
+                <button type="submit" name="submit" id="loginBtn" class="btn btn-primary color-menu collapse">เข้าสู่ระบบ</button>
+            </div>
           </div>
         </form>
       </div>
@@ -137,13 +146,25 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <label for="group_eec" class="col-md-2 control-label">กลุ่มอุตสาหกรรม</label>
+                        <div class="input-group col-md-4">
+                            <select class="form-control" id="group_eec" name="group_eec" required>
+                                <option id="groupEEC_id_list" disabled selected  value=""> -- กรุณาเลือกกลุ่ม -- </option>
+                                <?php genGroupEEC($conn); ?>
+                            </select>
+                            <div class="input-group-addon">
+                                <i class="fa fa-asterisk ml-3" style="color:red;" aria-hidden="true"> บังคับ</i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label class="control-label col-md-offset-1">ที่ตั้งสถานประกอบการ</label>
                     </div>
                     <div class="form-group">
                         <label for="province_id" class="col-md-2 control-label">จังหวัด</label>
                         <div class="input-group col-md-2">
                             <select class="form-control select2" id="province_id" name="province_id">
-                            <option id="province_id_list" > -- กรุณาเลือกจังหวัด -- </option>
+                            <option id="province_id_list" disabled selected  value=""> -- กรุณาเลือกจังหวัด -- </option>
                                 <?php genProvinces($conn); ?>
                             </select>
                         </div>
@@ -152,7 +173,7 @@
                         <label for="district_id" class="col-md-2 control-label">อำเภอ/เขต</label>
                         <div class="input-group col-md-2">
                             <select class="form-control select2" id="district_id" name="district_id">
-                                <option id="district_id_list" > -- กรุณาเลือกอำเภอ/เขต -- </option>
+                                <option id="district_id_list" disabled selected  value=""> -- กรุณาเลือกอำเภอ/เขต -- </option>
                                 <?php genAmphures($conn)?>
                             </select>
                         </div>
@@ -161,7 +182,7 @@
                         <label for="subdistrict_id" class="col-md-2 control-label">ตำบล/แขวง</label>
                         <div class="input-group col-md-2">
                             <select class="form-control select2" id="subdistrict_id" name="subdistrict_id">
-                                <option id="subdistrict_id_list"> -- กรุณาเลือกตำบล -- </option>
+                                <option id="subdistrict_id_list" disabled selected  value=""> -- กรุณาเลือกตำบล -- </option>
                                 <?php genDistricts($conn)?>
                             </select>
                         </div>
@@ -252,7 +273,26 @@
                             <?php genOption($tax_break_opt)?>
                             </select>
                         </div>
+                    </div> 
+                    <div class="form-group">
+                        <label for="tax_break" class="col-md-2 control-label">รหัสผ่าน</label>
+                        <div class="input-group col-md-12">
+                            <input type="password" minlength="8" class="form-control col-md-3" id="passRegis" name="password" value="" required>
+                            <div class="input-group-addon col-md-2">
+                                <i class="fa fa-asterisk ml-3 " style="color:red;" aria-hidden="true"> บังคับ</i>
+                            </div>
+                        </div>
                     </div>   
+                    <div class="form-group">
+                        <label for="tax_break" class="col-md-2 control-label">ยืนยันรหัสผ่าน</label>
+                        <div class="input-group col-md-12">
+                            <input type="password" minlength="8" class="form-control col-md-3" id="passCon" name="password" value="" required>
+                            <div class="input-group-addon col-md-4" id="checkPass">
+                            
+                            </div>                            
+                        </div>
+                    </div>   
+  
                     <div class="form-group">
                         <div class="col-md-offset-2 col-md-10">
                             <button type="submit" class="btn btn-primary" name="submit">บันทึกข้อมูล</button>
@@ -273,3 +313,55 @@
   <!-- /.modal-dialog -->
 </div>
 <!-- END REGISTER -->
+<script src="plugins/jquery/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+<script>
+    $(document).ready(function(){
+        $(document).on('click','#backBtn',function(){
+            $("#user").show()
+            $("#pass").hide()
+            $("#branchSelect").hide()
+            $("#backBtn").hide()
+            $("#nextBtn").show()
+            $("#loginBtn").hide()
+            $("#register").show()
+        })
+        $(document).on('click','#nextBtn',function(){
+            $.ajax({
+                type: 'post', 
+                dataType: "json",
+                url: 'dist/ajax.php',
+                data: {
+                    loginBranch:true, 
+                    id: $("#username").val(),
+                },
+                success: function (data) {
+                    if(data.status){
+                        $("#user").hide()
+                        $("#pass").show()
+                        $("#branchSelect").show()
+                        $("#backBtn").show()
+                        $("#nextBtn").hide()
+                        $("#loginBtn").show()
+                        $("#register").hide()
+                        $.each(data, function( index, value ) {
+                            if(index != "status"){
+                                $("#branchNo").append(
+                                '<option value="'+value.branch_no+'">'+value.branch_no+'</option>'
+                                )
+                            }
+                        });
+                        console.log(data)
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'ไม่พบรหัสในฐานข้อมูล',
+                            text: 'กรุณาสมัครเข้าใช้งาน',
+                            footer: ''   
+                        })
+                    }
+                },
+            })
+        })
+    })
+</script>

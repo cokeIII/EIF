@@ -14,10 +14,16 @@
         </p>
       </a>
       <ul class="nav nav-treeview">
-        <li class="nav-item">
-          <a href="#" class="nav-link active" id="project">
+        <li class="nav-item" id="project">
+          <a href="#" class="nav-link active" >
             <i class="far fa-circle nav-icon"></i>
             <p>แบบเสนอโครงการ</p>
+          </a>
+        </li>
+        <li class="nav-item" id="preProject">
+          <a href="#" class="nav-link active" >
+            <i class="far fa-circle nav-icon"></i>
+            <p>โครงการที่เสนอ</p>
           </a>
         </li>
       </ul>

@@ -14,6 +14,9 @@ $(document).ready(function(){
     $(document).on('click','#eecProAll',function(){
         $('#mainContent').load("pages/about/eecProAll.php")
     })
+    $(document).on('click','#preProject',function(){
+        $('#mainContent').load("pages/project/preProject.php")
+    })
     $(document).on('click','#register',function(){
         $("#tableSearchVat").html('<div class="topic-search-vat mt-10">ค้นหาข้อมูลจากสรรพากร</div><div id="spinners" class="canter spinner loader"></div>')
         $("#spinners").hide()
@@ -131,61 +134,71 @@ $(document).ready(function(){
     });
   
     $("#formRegister").submit(function(e){
-          e.preventDefault()
-          $.ajax({
-              type: 'post', 
-              dataType: "json",
-              url: 'pages/register/dbRegister.php',
-              data: {
-                  submit:"formRegister", 
-                  business_vat: $("#business_vat").val(),
-                  branch_number_vat: $("#branch_number_vat").val(),
-                  business_name: $("#business_name").val(),
-                  business_branch: $("#business_branch").val(),
-                  business_size: $("#business_size").val(),
-                  amount_emp: $("#amount_emp").val(),
-                  job_description: $("#job_description").val(),
-                  province_id: $("#province_id").val(),
-                  district_id: $("#district_id").val(),
-                  subdistrict_id: $("#subdistrict_id").val(),
-                  postcode: $("#postcode").val(),
-                  house_code: $("#house_code").val(),
-                  address_no: $("#address_no").val(),
-                  road: $("#road").val(),
-                  land: $("#land").val(),
-                  location: $("#location").val(),
-                  email: $("#email").val(),
-                  business_phone: $("#business_phone").val(),
-                  registration_date: $("#registration_date").val(),
-                  capital: $("#capital").val(),
-                  tax_break: $("#tax_break").val(),
-              },
-              success: function (data) {
-                  if(data){
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'สมัครใช้งานสำเร็จ',
-                        text: '',
-                        footer: ''   
-                    })
-                    $("#regisContent").html("")
-                    $('#modal-register').modal('hide');
-                  } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'สมัครใช้งานไม่สำเร็จ',
-                        text: '',
-                        footer: ''   
-                    })
-                  }
-              },
-          })
-      }) 
-  
+        e.preventDefault()
+        let password = $("#passRegis").val()
+        if(password != $("#passCon").val()){
+            $("#checkPass").html(
+                '<b style="color: red;" class="ml-3">รหัสผ่านไม่ตรงกัน</b>'
+            )
+            return
+        }
+        $.ajax({
+            type: 'post', 
+            dataType: "json",
+            url: 'pages/register/dbRegister.php',
+            data: {
+                submit:"formRegister", 
+                business_vat: $("#business_vat").val(),
+                branch_number_vat: $("#branch_number_vat").val(),
+                business_name: $("#business_name").val(),
+                business_branch: $("#business_branch").val(),
+                business_size: $("#business_size").val(),
+                amount_emp: $("#amount_emp").val(),
+                job_description: $("#job_description").val(),
+                province_id: $("#province_id").val(),
+                district_id: $("#district_id").val(),
+                subdistrict_id: $("#subdistrict_id").val(),
+                postcode: $("#postcode").val(),
+                house_code: $("#house_code").val(),
+                address_no: $("#address_no").val(),
+                road: $("#road").val(),
+                land: $("#land").val(),
+                location: $("#location").val(),
+                email: $("#email").val(),
+                business_phone: $("#business_phone").val(),
+                registration_date: $("#registration_date").val(),
+                capital: $("#capital").val(),
+                tax_break: $("#tax_break").val(),
+                password: password,
+                group_eec: $("#group_eec").val(),
+            },
+            success: function (data) {
+                if(data){
+                Swal.fire({
+                    icon: 'success',
+                    title: 'สมัครใช้งานสำเร็จ',
+                    text: '',
+                    footer: ''   
+                })
+                $("#regisContent").html("")
+                $('#modal-register').modal('hide');
+                } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'สมัครใช้งานไม่สำเร็จ',
+                    text: '',
+                    footer: ''   
+                })
+                }
+            },
+        })
+    }) 
+
   
     function replaceStr($str){
       return $str.replace(/-/g, "")
     }
+
 })
 function setEmpty() {
     $("#business_vat").val("")
@@ -203,4 +216,5 @@ function setEmpty() {
     $("#business_phone").val("")
     $("#registration_date").val("")
     $("#capital").val("")
-  }
+}
+

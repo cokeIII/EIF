@@ -5,7 +5,7 @@
     require_once "pages/conf.php";
     require_once "dist/util.php";
     require_once "dist/sqlUtil.php";
-    require_once "pages/connect.php";    
+    require_once "pages/connect.php";   
   ?> 
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -49,9 +49,14 @@
     </ul>
 
     <ul class="navbar-nav ml-auto">
-    <li class="nav-item">
+      <li class="nav-item">
         <?php if(isset($_SESSION["username"])){
             echo $_SESSION["username"];
+        };?>
+      </li>
+      <li class="nav-item">
+        <?php if(isset($_SESSION["branch_no"])){
+            echo '<div class="ml-1">สาขา '.$_SESSION["branch_no"].'</div>';
         };?>
       </li>
       <li class="nav-item">
@@ -293,7 +298,7 @@ $(function () {
       labels  : ['ยานยนต์สมัยใหม่', 'อิเล็กทรอนิกส์อัจฉริยะ', 'การท่องเที่ยว', 'การเกษตร', 'การแปรรูปอาหาร', 'หุ่นยนต์', 'โลจิสติกส์','ดิจิทัล','เชื้อเพลิงชีวภาพ','การแพทย์ครบวงจร'],
       datasets: [
         {
-          label               : 'Digital Goods',
+          label               : 'จำนวนโครงการ',
           backgroundColor     : 'rgba(60,141,188,0.9)',
           borderColor         : 'rgba(60,141,188,0.8)',
           pointRadius          : false,
@@ -340,7 +345,7 @@ var salesGraphChartData = {
   labels  : ['2011 Q1', '2011 Q2', '2011 Q3', '2011 Q4', '2012 Q1', '2012 Q2', '2012 Q3', '2012 Q4', '2013 Q1', '2013 Q2'],
   datasets: [
     {
-      label               : 'Digital Goods',
+      label               : '',
       fill                : false,
       borderWidth         : 2,
       lineTension         : 0,
@@ -394,3 +399,16 @@ var salesGraphChart = new Chart(salesGraphChartCanvas, {
   }
 )
 </script>
+<?php
+  if(isset($_SESSION["login_fail"]) && $_SESSION["login_fail"]==true){ 
+    echo "<script>
+              Swal.fire({
+                icon: 'error',
+                title: 'รหัสผ่านไม่ถูกต้อง',
+                text: '',
+                footer: ''   
+            })
+          </script>";
+    unset($_SESSION["login_fail"]);
+  } 
+?>

@@ -1,4 +1,6 @@
 <!-- Content Header (Page header) -->
+<?php require_once "../conf.php";?>
+<link rel="stylesheet" href="../../dist/css/aboutEEC.css">
 <div class="content-header">
     <div class="container-fluid">
     <div class="row mb-2">
@@ -22,7 +24,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-12">
-                            <img src="dist/img/about_eec.jpg"/>
+                            <img src="dist/img/about_eec.jpg" class="responsive"/>
                         </div>
                         <div class="col-md-10 mt-3">
                             <div class="eec-txt">

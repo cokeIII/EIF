@@ -26,8 +26,9 @@
     <div class="row ">
         <div class="col-md-12">
             <div class="card" id="formProjects">
-                <hr class="hr">
                 <form id="formProjectInsert" method="post" class="form-horizontal" action="">
+                    <input type="hidden" id="busi_id" value="<?php echo $_SESSION["id"]; ?>">
+                    <input type="hidden" id="branch_no" value="<?php echo $_SESSION["branch_no"]; ?>">
                     <div class="card-body">
                         <div class="form-group">
                             <label for="projectName" class="col-md-2 control-label h5">1. ชื่อโครงการ</label>
@@ -189,12 +190,25 @@
                     product: $("#product").val(),
                     indicator: $("#indicator").val(),
                     locations: $("#location").val(),
+                    busi_id: $("#busi_id").val(),
+                    branch_no: $("#branch_no").val(),
                 },
                 success: function (data) {
                     if(data){
-                        alert("เพิ่มข้อมูลสำเร็จ")
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'เสนอโครงการสำเร็จ',
+                            text: '',
+                            footer: ''   
+                        })
+                    
                     } else {
-                        alert("ERROR เกิดข้อผิดพลาด")
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'ERROR เกิดข้อผิดพลาด',
+                            text: '',
+                            footer: ''   
+                        })
                     }
                 },
             })

@@ -22,6 +22,8 @@ if(isset($_POST['submit'])){
     $registration_date = $_POST['registration_date'];
     $capital = $_POST['capital'];
     $tax_break = $_POST['tax_break'];
+    $pass = md5($_POST["password"]);
+    $group_id = $_POST["group_eec"];
 
     $sql = "INSERT INTO business (
     id , 
@@ -45,7 +47,9 @@ if(isset($_POST['submit'])){
     date_vat,
     regis_capital,
     tax_deduction,
-    create_time
+    create_time,
+    password,
+    group_id
     )VALUES ( 
         '$business_vat', 
         '$branch_number_vat',
@@ -68,7 +72,9 @@ if(isset($_POST['submit'])){
         '$registration_date',
         '$capital',
         '$tax_break',
-         NOW()
+         NOW(),
+        '$pass',
+        '$group_id'
     )";
 
     if ($conn->query($sql) === TRUE) {
