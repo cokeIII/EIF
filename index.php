@@ -33,6 +33,12 @@
   <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
   <!-- summernote -->
   <link rel="stylesheet" href="plugins/summernote/summernote-bs4.css">
+  <!-- fullCalendar -->
+  <link rel="stylesheet" href="plugins/fullcalendar/main.min.css">
+  <link rel="stylesheet" href="plugins/fullcalendar-daygrid/main.min.css">
+  <link rel="stylesheet" href="plugins/fullcalendar-timegrid/main.min.css">
+  <link rel="stylesheet" href="plugins/fullcalendar-bootstrap/main.min.css">
+
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 </head>
@@ -262,6 +268,13 @@
 <!-- jQuery UI 1.11.4 -->
 <script src="plugins/jquery-ui/jquery-ui.min.js"></script>
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+<script src="plugins/moment/moment.min.js"></script>
+<script src="plugins/fullcalendar/main.min.js"></script>
+<script src="plugins/fullcalendar-daygrid/main.min.js"></script>
+<script src="plugins/fullcalendar-timegrid/main.min.js"></script>
+<script src="plugins/fullcalendar-interaction/main.min.js"></script>
+<script src="plugins/fullcalendar-bootstrap/main.min.js"></script>
+
 <script>
   $.widget.bridge('uibutton', $.ui.button)
 </script>
@@ -286,6 +299,7 @@
 <!-- overlayScrollbars -->
 <script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
 <!-- AdminLTE App -->
+
 <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
 <script src="dist/js/adminlte.js"></script>
 <script src="dist/js/pages/index.js"></script>

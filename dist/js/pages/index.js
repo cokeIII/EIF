@@ -99,7 +99,7 @@ $(document).ready(function(){
     })
   
   
-    $(document).on('click', 'tr', function () {
+    $(document).on('click', '.row-vat', function () {
       $(this).find('td').each(function() {
         var cellText = $(this).html()
         rowData[$(this).attr("key")] = cellText

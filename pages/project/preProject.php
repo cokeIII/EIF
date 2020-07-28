@@ -8,6 +8,7 @@
     $sql = "select project_id,project_name,pro_status,branch_no,busi_id,persons from project where busi_id = '$busi_id' and branch_no = '$branch_no'";
     $result = $conn->query($sql);
 ?>
+
 <div class="content-header">
     <div class="container-fluid">
     <div class="row mb-2">
@@ -89,7 +90,7 @@
                                         <span class="badge badge-warning"><?php echo $row["pro_status"];?></span>
                                     </td>
                                     <td class="project-actions text-right">
-                                        <a class="btn btn-primary btn-sm" href="#">
+                                        <a class="btn btn-primary btn-sm viewProject" href="#"  val="<?php echo $row["project_id"]; ?>">
                                             <i class="fas fa-folder">
                                             </i>
                                             View
@@ -116,8 +117,71 @@
         </div>
     </div>
 </section>
+
 <script>
     $(document).ready(function(){
         $("#tablePrePro").dataTable()
+        $(document).on("click",".viewProject",function(){
+            $.ajax({
+                type: 'post', 
+                dataType: "json",
+                url: 'pages/project/viewProject.php',
+                data: {
+                    viewProject:true, 
+                    projectId: $(this).attr("val"),
+                },
+                success: function (data) {
+                    $('#mainContent').html(data.content)         
+                    var date = new Date()
+                    var d    = date.getDate(),
+                        m    = date.getMonth(),
+                        y    = date.getFullYear()
+
+                    var Calendar = FullCalendar.Calendar;
+                    
+                    var calendarEl = document.getElementById('calendar');
+                    let i = 0,dateData=[];
+                    $.each(data.calendar,function(index,value){
+                        let newDate = value.split('-')
+                        if(index == "start_duration"){
+                            dateData[i]={
+                                title          : 'วันเริ่มโครงการ',
+                                start          : new Date(newDate[0], newDate[1]-1,newDate[2]),
+                                allDay         : false,
+                                backgroundColor: '#0073b7', //Blue
+                                borderColor    : '#0073b7' //Blue
+                            }
+                        } else if(index == "end_duration") {
+                            dateData[i]={
+                                title          : 'วันสิ้นสุดโครงการ',
+                                start          : new Date(newDate[0], newDate[1]-1,newDate[2]),
+                                allDay         : false,
+                                backgroundColor: '#0073b7', //Blue
+                                borderColor    : '#0073b7' //Blue
+                            }
+                        }
+                        i++
+                    })
+                    
+                    var calendar = new Calendar(calendarEl, {
+                        plugins: [ 'bootstrap', 'interaction', 'dayGrid', 'timeGrid' ],
+                        header    : {
+                            left  : 'prev,next today',
+                            center: 'title',
+                            right : 'dayGridMonth,timeGridWeek,timeGridDay'
+                        },
+                        'themeSystem': 'bootstrap',
+                        //Random default events
+                        events    : dateData,
+                    });
+
+                    calendar.render();
+
+                },
+            })
+
+        })
+
+
     })
 </script>

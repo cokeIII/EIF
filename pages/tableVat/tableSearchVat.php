@@ -57,7 +57,7 @@ $json.='<div id="searchVat" class="">
         foreach($dataBusi as $key=>$value){
             if(EC3($value['vProvince'])){
                         
-            $json.='<tr id="rowData" val="'.$value['vNID'].'">
+            $json.='<tr id="rowData" class="row-vat" val="'.$value['vNID'].'">
                 <td key="no">'.$No. '</td> 
                 <td key="vNID" >'.$value['vNID'].'</td>  
                 <td key="vBranchNumber" >' .setBranchNumber($value['vBranchNumber']). '</td>  
