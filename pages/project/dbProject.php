@@ -14,8 +14,8 @@ if(isset($_POST['submit'])){
     $budget = $_POST['budget'];
     $product = $_POST['product'];
     $indicator = $_POST['indicator'];
-    $persons = json_encode($persons);
-    $budget = json_encode($budget);
+    $persons = json_encode($persons,JSON_UNESCAPED_UNICODE);
+    $budget = json_encode($budget,JSON_UNESCAPED_UNICODE);
     $sql = "INSERT INTO project (
      project_name,
      busi_id, 

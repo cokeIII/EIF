@@ -4,7 +4,14 @@
     $busi_id = $_SESSION["id"];
     $branch_no = $_SESSION["branch_no"];
     $projectId = $_POST["projectId"];
-    $sql = "select * from project where busi_id = '$busi_id' and branch_no = '$branch_no' and project_id = '$projectId'";
+    if(isset($_SESSION["status"])){
+        if($_SESSION["status"] == "admin"){
+            $sql = "select * from project where project_id = '$projectId'";
+        } else if($_SESSION["status"] == "user") {
+            $sql = "select * from project where busi_id = '$busi_id' and branch_no = '$branch_no' and project_id = '$projectId'";
+        }
+    } 
+
     $result = $conn->query($sql);
     $jsonData["content"] = "";
     $jsonData["content"].='<div class="content-header">
@@ -68,6 +75,24 @@
                             '.$row["maingoal"].'
                         </div>
                     </div>
+                    <div class="card ">
+                        <div class="card-header"><h5>สถาณที่</h5></div>
+                        <div class="card-body">
+                            '.$row["locations"].'
+                        </div>
+                    </div>
+                    <div class="card ">
+                        <div class="card-header"><h5>ประโยชน์ที่คาดว่าจะได้รับ</h5></div>
+                        <div class="card-body">
+                            '.$row["product"].'
+                        </div>
+                    </div>
+                    <div class="card ">
+                        <div class="card-header"><h5>วันที่ลงทะเบียน</h5></div>
+                        <div class="card-body">
+                            '.$row["project_date"].'
+                        </div>
+                    </div>
                 </div>
                     ';
                 $jsonData["content"].='<div class="col-md-6 ">
@@ -77,6 +102,42 @@
                             <div id="calendar"></div>
                         </div>
                     </div>
+                    <div class="card">
+                        <div class="card-header"><h5>รายการวันที่</h5></div>
+                        <div class="card-body">
+                            <div id="dateDetail"></div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header"><h5>วิธีการประเมินผลและดัชนีชี้วัดความสำเร็จ</h5></div>
+                        <div class="card-body">
+                            '.$row["indicator"].'
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header"><h5>งบประมาณ</h5></div>
+                        <div class="card-body">
+                            ';
+
+                            $someArray = json_decode($row["budget"], true);
+                            $jsonData["content"].= "<p> <b>งบประมาณ</b> : ".$someArray["sumPrice"]." บาท</p>";
+                            $totalPrice = 0;
+                            foreach ($someArray as $key => $value) {
+                                if($key != "sumPrice"){
+                                    $jsonData["content"].="<p> <b></b>".$value["disBudget"]." ";
+                                    $jsonData["content"].="<b>จำนวน</b> : ".$value["num"]."";
+                                    $jsonData["content"].="<b> </b> ".$value["unit"]." ";
+                                    $jsonData["content"].="<b>หน่วยละ </b> : ".$value["price"]." บาท ";
+                                    $jsonData["content"].="<b>รวม </b> : ".$value["price"]*$value["num"]." บาท</p>";
+                                    $totalPrice+=$value["price"]*$value["num"];
+                                }
+                            }
+                            $jsonData["content"].= "<p> <b>รวมทั้งหมด</b> : ".$totalPrice." บาท</p>";
+
+                            $jsonData["content"].='
+                        </div>
+                    </div>
+
                 ';
                         $jsonData["calendar"] = [
                             "start_duration" => $row["start_duration"],

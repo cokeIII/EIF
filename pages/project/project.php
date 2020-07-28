@@ -172,7 +172,7 @@
                 }
                 budget[$( this ).attr('rows')][$( this ).attr('id')]=$( this ).val()
             }); 
-
+            console.log(budget)
             e.preventDefault()
             $.ajax({
                 type: 'post', 
@@ -236,7 +236,7 @@
                     '<input rows="'+i+'" type="number" class="addBudget col-md-1 mt-1 form-control" required="" id="num" name="num" value="" required="">'+
                     '<label for="unit" class="mr-1 col-md-1 control-label">หน่วยนับ</label>'+
                     '<input rows="'+i+'" type="text" class="addBudget col-md-1 mt-1 form-control" required="" id="unit" name="unit" value="" placeholder="มื้อ" required="">'+
-                    '<label for="price" class="col-md-1 control-label">ราคาหน่วยละ</label>'+
+                    '<label for="price" class="col-md-2 control-label">ราคาหน่วยละ</label>'+
                     '<input rows="'+i+'" type="number" class="addBudget col-md-2 mt-1 form-control" required="" id="price" name="price" value="" required="">'+
                 '</div>'
             )

@@ -57,4 +57,15 @@
         echo json_encode($json_result);
 
     }
+    
+    if(isset($_POST["approve"])){
+        $id = $_POST["projectId"];
+        $sql = "update project set pro_status = 'ผ่านการอนุมัติ' where project_id ='$id'";
+        $result = $conn->query($sql);
+        if ($result > 0) {
+            echo json_encode(true);
+        } else {
+            echo json_encode(false);
+        }
+    }
 ?>
