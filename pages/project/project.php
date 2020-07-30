@@ -97,7 +97,7 @@
                             <div class="input-group col-md-12 mt-1">
                                 <label for="budgetNum" class="col-md-2 control-label mr-2">จำนวนค่าใช้จ่าย</label>
                                 <input class=" col-md-1 form-control" type="number" id="budgetNum" name="budgetNum" value="1" min="1" >
-
+                                <h6 class="col-md-12 control-label">รายละเอียด</h6>
                                 <div id="inputBudget" class='col-md-12'>
 
                                 </div>
@@ -230,7 +230,7 @@
         function addBudget(i){
             $("#inputBudget").append(
                 '<div class="row" rid="'+i+'">'+
-                    '<label for="disBudget" class="col-md-2 control-label">รายละเอียดค่าใช้จ่าย</label>'+
+                    ''+
                     '<input rows="'+i+'" type="text" class="addBudget col-md-2 mt-1 form-control" required="" id="disBudget" name="disBudget" value="" placeholder="ค่าอาหารและเครื่องดื่ม" required="">'+
                     '<label for="num" class="mr-1 col-md-1 control-label">จำนวน</label>'+
                     '<input rows="'+i+'" type="number" class="addBudget col-md-1 mt-1 form-control" required="" id="num" name="num" value="" required="">'+

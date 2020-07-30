@@ -2,6 +2,7 @@
 <?php 
     require_once "../conf.php";
     require_once "../connect.php";
+    
     $busi_id = $_SESSION["id"];
     $branch_no = $_SESSION["branch_no"];
     if(isset($_SESSION["status"])){
@@ -57,7 +58,7 @@
                                     <th style="width: 8%" class="text-center">
                                         สถานะ
                                     </th>
-                                    <th style="width: 17%">
+                                    <th style="width: 25%">
                                     </th>
                                 </tr>
                             </thead>

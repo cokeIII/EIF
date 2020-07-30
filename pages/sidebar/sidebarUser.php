@@ -26,6 +26,18 @@
             <p>โครงการที่เสนอ</p>
           </a>
         </li>
+        <li class="nav-item" id="ticket">
+          <a href="#" class="nav-link active" >
+            <i class="far fa-circle nav-icon"></i>
+            <p>รายงานปัญหาโครงการ</p>
+          </a>
+        </li>
+        <li class="nav-item" id="quarter">
+          <a href="#" class="nav-link active" >
+            <i class="far fa-circle nav-icon"></i>
+            <p>สรุปรายงานแต่ละไตรมาส</p>
+          </a>
+        </li>
       </ul>
     </li>
   </ul>

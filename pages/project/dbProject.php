@@ -48,7 +48,6 @@ if(isset($_POST['submit'])){
         echo json_encode(true);
     } else {
         echo json_encode(false);
-        print_r($sql);
     }
 }
 ?>

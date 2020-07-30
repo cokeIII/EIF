@@ -20,6 +20,9 @@ $(document).ready(function(){
     $(document).on('click','#preProjectAd',function(){
         $('#mainContent').load("pages/project/preProject.php")
     })
+    $(document).on('click','#ticket',function(){
+        $('#mainContent').load("pages/project/ticket.php")
+    })
     $(document).on('click','#register',function(){
         $("#tableSearchVat").html('<div class="topic-search-vat mt-10">ค้นหาข้อมูลจากสรรพากร</div><div id="spinners" class="canter spinner loader"></div>')
         $("#spinners").hide()
