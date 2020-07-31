@@ -13,7 +13,7 @@ $jsonData.= '<div class="content-header">
     <div class="container-fluid">
     <div class="row mb-2">
         <div class="col-sm-8">
-        <h1 class="m-0 text-dark">รายงานปัญหา '.$name.' ประจำไตนมาสที่ '.$yearQuarter.' ปี '.date("Y").'</h1>
+        <h1 class="m-0 text-dark">รายงานปัญหา '.$name.' ประจำไตรมาสที่ '.$yearQuarter.' ปี '.date("Y").'</h1>
         </div><!-- /.col -->
         <div class="col-sm-4">
         <ol class="breadcrumb float-sm-right">

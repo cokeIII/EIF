@@ -40,7 +40,7 @@ $jsonData.=
             <div class="col-md-12">
                 <div class="card" id="formProjects">
                     <div class="card-body">
-                        <table class="table table-bordered hover projects" id="tablePrePro">
+                        <table class="table table-bordered hover projects" id="tableTicket">
                             <thead>
                                 <tr>
                                     <th style="width: 1%">
@@ -77,13 +77,15 @@ $jsonData.=
                                         }
                                        
                                     $jsonData.='</td>
-                                    <td class="project-actions text-center">
-                                        <a class="btn btn-warning btn-sm btn-ticket mt-3" href="#"   proName="'.$row["project_name"].'" proId="'.$row["project_id"].'">
-                                            <i class="fas fa-comment">
-                                            </i>
-                                            รายงานปัญหา
-                                        </a>
-                                        <a class="btn btn-primary btn-sm  mt-3 all-ticket" href="#"  proName="'.$row["project_name"].'" proId="'.$row["project_id"].'">
+                                    <td class="project-actions text-center">';
+                                        if(isset($_SESSION["status"]) && $_SESSION["status"]!="admin"){
+                                            $jsonData.='<a class="btn btn-warning btn-sm btn-ticket mt-3" href="#"   proName="'.$row["project_name"].'" proId="'.$row["project_id"].'">
+                                                <i class="fas fa-comment">
+                                                </i>
+                                                รายงานปัญหา
+                                            </a>';
+                                        }
+                                        $jsonData.='<a class="btn btn-primary btn-sm  mt-3 all-ticket" href="#"  proName="'.$row["project_name"].'" proId="'.$row["project_id"].'">
                                             <i class="fas fa-folder">
                                             </i>
                                             ปัญหาที่รายงานทั้งหมด

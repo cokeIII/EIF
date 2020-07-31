@@ -16,7 +16,7 @@
             quater,
             qua_date,
             file_name
-            from quarter_project where project_id ='$id'
+            from quarter_project where project_id ='$id' and status='รายงานปัญหา'
             ";
         } else if($_SESSION["status"] == "user") {
             $sql = "select 
@@ -28,7 +28,7 @@
             quater,
             qua_date,
             file_name
-            from quarter_project where project_id ='$id'
+            from quarter_project where project_id ='$id' and status='รายงานปัญหา'
             ";
         }
     } 
@@ -59,7 +59,7 @@ $jsonData.='<div class="content-header">
             <div class="col-md-12">
                 <div class="card" id="formProjects">
                     <div class="card-body">
-                        <table class="table table-bordered hover projects" id="tablePrePro">
+                        <table class="table table-bordered hover projects" id="tableListTicket">
                             <thead>
                                 <tr>
                                     <th style="width: 1%">

@@ -27,10 +27,41 @@ $(document).ready(function(){
             url: 'pages/project/ticket.php',
             data: {},
             success: function (data) {
-                $('#mainContent').html(data)         
+                $('#mainContent').html(data)
+                $("#tableTicket").dataTable()         
             },
         })
     })
+    $(document).on('click','#indicator',function(){
+        $.ajax({
+            type: 'post', 
+            dataType: "json",
+            url: 'pages/project/indicator.php',
+            data: {},
+            success: function (data) {
+                $('#mainContent').html(data)
+                $("#tableIndicator").dataTable()        
+            },
+        })
+    })
+    /// indicator
+    $(document).on('click','.btn-indicator',function(){
+        $.ajax({
+            type: 'post', 
+            dataType: "json",
+            url: 'pages/project/formIndicator.php',
+            data: {
+                ticket:true, 
+                projectName: $(this).attr("proName"),
+                proId: $(this).attr("proId")
+            },
+            success: function (data) {
+                $('#mainContent').html(data)
+            },
+        })
+
+    })
+    ///END indicator
     $(document).on('click','#register',function(){
         $("#tableSearchVat").html('<div class="topic-search-vat mt-10">ค้นหาข้อมูลจากสรรพากร</div><div id="spinners" class="canter spinner loader"></div>')
         $("#spinners").hide()
@@ -249,6 +280,7 @@ $(document).ready(function(){
                 },
                 success: function (data) {
                     $('#mainContent').html(data)
+                    $("#tableListTicket").dataTable()
                 },
             })
         }
@@ -358,20 +390,4 @@ $(document).ready(function(){
     })
     // END ticket.php
 })
-function setEmpty() {
-    $("#business_vat").val("")
-    $("#branch_number_vat").val("")
-    $("#business_name").val("")
-    $("#business_branch").val("")
-    $("#amount_emp").val("")
-    $("#job_description").val("")
-    $("#house_code").val("")
-    $("#address_no").val("")
-    $("#road").val("")
-    $("#land").val("")
-    $("#location").val("")
-    $("#email").val()
-    $("#business_phone").val("")
-    $("#registration_date").val("")
-    $("#capital").val("")
-}
+
