@@ -1,4 +1,4 @@
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
 <?php 
     require_once "../conf.php";
     require_once "../connect.php";
@@ -13,9 +13,9 @@
         }
     } 
     $result = $conn->query($sql);
-?>
-
-<div class="content-header">
+    $jsonData = "";
+$jsonData.=
+'<div class="content-header">
     <div class="container-fluid">
     <div class="row mb-2">
         <div class="col-sm-6">
@@ -56,42 +56,44 @@
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody>
-                            <?php
+                            <tbody>';
+
                             if ($result->num_rows > 0) {
                                 $no = 0;
                                 while($row = $result->fetch_assoc()) {
-                            ?>
-                                <tr>
+
+                                $jsonData.='<tr>
                                     <td>
-                                        <?php echo ++$no;?>
+                                        '.(++$no).'
                                     </td>
                                     <td class="pro-name">
-                                        <?php echo $row["project_name"];?>
+                                        '.$row["project_name"].'
                                     </td>
-                                    <td>
-                                        <?php
+                                    <td>';
+                                       
                                         $someArray = json_decode($row["persons"], true);
                                         foreach ($someArray as $key => $value) {
-                                            echo "<p>".$value["perName"]."</p>";
+                                            $jsonData.='<p>'.$value["perName"].'</p>';
                                         }
-                                        ?>
-                                    </td>
+                                       
+                                    $jsonData.='</td>
                                     <td class="project-actions text-center">
-                                        <a class="btn btn-warning btn-sm btn-ticket" href="#"   proName="<?php echo $row["project_name"];?>" proId="<?php echo $row["project_id"];?>">
+                                        <a class="btn btn-warning btn-sm btn-ticket mt-3" href="#"   proName="'.$row["project_name"].'" proId="'.$row["project_id"].'">
                                             <i class="fas fa-comment">
                                             </i>
                                             รายงานปัญหา
                                         </a>
-                                        <a class="btn btn-primary btn-sm  mt-3 all-ticket" href="#"  proName="<?php echo $row["project_name"];?>" proId="<?php echo $row["project_id"];?>">
+                                        <a class="btn btn-primary btn-sm  mt-3 all-ticket" href="#"  proName="'.$row["project_name"].'" proId="'.$row["project_id"].'">
                                             <i class="fas fa-folder">
                                             </i>
                                             ปัญหาที่รายงานทั้งหมด
                                         </a>
                                     </td>
                                 </tr>
-                            <?php } 
-                            }?>
+                            ';
+                             } 
+                            }
+                            $jsonData.='
                             </tbody>
                         </table>
                     </div>
@@ -99,141 +101,5 @@
             </div>
         </div>
     </div>
-</section>
-
-<script>
-    $(document).ready(function(){
-        $("#tablePrePro").dataTable()
-        $(document).on("click",".btn-ticket",function(){
-            let item = $(this)
-            $.ajax({
-                type: 'post', 
-                dataType: "json",
-                url: 'pages/project/formticket.php',
-                data: {
-                    ticket:true, 
-                    projectName: $(this).attr("proName"),
-                    proId: $(this).attr("proId")
-                },
-                success: function (data) {
-                    $('#mainContent').html(data)
-                },
-            })
-        })
-        var projectName = ""
-        var proId = ""
-        function reListTicket(projectName,proId){
-            $.ajax({
-                type: 'post', 
-                dataType: "json",
-                url: 'pages/project/listTicket.php',
-                data: {
-                    ticket:true, 
-                    projectName: projectName,
-                    proId: proId
-                },
-                success: function (data) {
-                    $('#mainContent').html(data)
-                },
-            })
-        }
-        $(document).on("click",".all-ticket",function(){
-            projectName = $(this).attr("proName")
-            proId = $(this).attr("proId")
-            reListTicket(projectName,proId)
-        })
-
-        $(document).on("click",".del-ticket",function(){
-            let id = $(this).attr("val")
-            let btn = $(this)
-            const swalWithBootstrapButtons = Swal.mixin({
-            customClass: {
-                confirmButton: 'btn btn-success ml-2',
-                cancelButton: 'btn btn-danger'
-            },
-            buttonsStyling: false
-            })
-
-            swalWithBootstrapButtons.fire({
-            title: 'ต้องการลบ ใช่ หรือ ไม่ ?',
-            text: "",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'ลบ',
-            cancelButtonText: 'ยกเลิก',
-            reverseButtons: true
-            }).then((result) => {
-            if (result.value) {
-                $.ajax({
-                    type: 'post', 
-                    dataType: "json",
-                    url: 'pages/project/dbTicket.php',
-                    data: {
-                        delTicket:true, 
-                        qua_id : id,
-                    },
-                    success: function (data) {
-                        if(data){
-                            swalWithBootstrapButtons.fire(
-                            'ลบสำเร็จ',
-                            '',
-                            'success'
-                            )
-                            reListTicket(projectName,proId)
-
-                        } else {
-                            swalWithBootstrapButtons.fire(
-                            'ลบไม่สำเร็จ',
-                            '',
-                            'error'
-                            )
-
-                        }
-                    },
-                })
-
-            } else if (
-                /* Read more about handling dismissals below */
-                result.dismiss === Swal.DismissReason.cancel
-            ) {
-                swalWithBootstrapButtons.fire(
-                'ยกเลิก',
-                '',
-                'error'
-                )
-            }
-            })
-        })
-
-        $(document).on("submit","#formTicket",function(e){
-            e.preventDefault()
-            let formTicket = $(this)
-            $.ajax({
-                url: "pages/project/dbTicket.php",
-                type: "POST",
-                data:  new FormData(this),
-                contentType: false,
-                cache: false,
-                processData:false,
-                success: function(data) {
-                    if(data){
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'รายงานปัญหาสำเร็จ',
-                            text: '',
-                            footer: ''   
-                        })
-                        formTicket[0].reset();
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'ERROR เกิดข้อผิดพลาด',
-                            text: '',
-                            footer: ''   
-                        })
-                    }
-                }
-            })
-        })
-    })
-</script>
+</section>';
+echo json_encode($jsonData);

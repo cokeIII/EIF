@@ -21,7 +21,15 @@ $(document).ready(function(){
         $('#mainContent').load("pages/project/preProject.php")
     })
     $(document).on('click','#ticket',function(){
-        $('#mainContent').load("pages/project/ticket.php")
+        $.ajax({
+            type: 'post', 
+            dataType: "json",
+            url: 'pages/project/ticket.php',
+            data: {},
+            success: function (data) {
+                $('#mainContent').html(data)         
+            },
+        })
     })
     $(document).on('click','#register',function(){
         $("#tableSearchVat").html('<div class="topic-search-vat mt-10">ค้นหาข้อมูลจากสรรพากร</div><div id="spinners" class="canter spinner loader"></div>')
@@ -51,7 +59,7 @@ $(document).ready(function(){
             $("#tableSearchVat").html(data)
             $('#busiTable').dataTable();            
           },
-      })
+        })
     }) 
     var rowData = {}
     $(document).on('change', '#province_id', function () {
@@ -204,7 +212,151 @@ $(document).ready(function(){
     function replaceStr($str){
       return $str.replace(/-/g, "")
     }
+    /// ticket.php
+    $(document).ready(function(){
+        $.ajaxSetup({
+            cache: true
+        });
+        $("#tablePrePro").dataTable()
+        $(document).on("click",".btn-ticket",function(){
+            let item = $(this)
+            $.ajax({
+                type: 'post', 
+                dataType: "json",
+                url: 'pages/project/formticket.php',
+                data: {
+                    ticket:true, 
+                    projectName: $(this).attr("proName"),
+                    proId: $(this).attr("proId")
+                },
+                success: function (data) {
+                    $('#mainContent').html(data)
+                },
+            })
+        })
 
+        var projectName = ""
+        var proId = ""
+        function reListTicket(projectName,proId){
+            $.ajax({
+                type: 'post', 
+                dataType: "json",
+                url: 'pages/project/listTicket.php',
+                data: {
+                    ticket:true, 
+                    projectName: projectName,
+                    proId: proId
+                },
+                success: function (data) {
+                    $('#mainContent').html(data)
+                },
+            })
+        }
+        $(document).on("click",".all-ticket",function(){
+            projectName = $(this).attr("proName")
+            proId = $(this).attr("proId")
+            reListTicket(projectName,proId)
+        })
+
+        $(document).on("click",".del-ticket",function(){
+            let id = $(this).attr("val")
+            let btn = $(this)
+            const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: 'btn btn-success ml-2',
+                cancelButton: 'btn btn-danger'
+            },
+            buttonsStyling: false
+            })
+
+            swalWithBootstrapButtons.fire({
+            title: 'ต้องการลบ ใช่ หรือ ไม่ ?',
+            text: "",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'ลบ',
+            cancelButtonText: 'ยกเลิก',
+            reverseButtons: true
+            }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    type: 'post', 
+                    dataType: "json",
+                    url: 'pages/project/dbTicket.php',
+                    data: {
+                        delTicket:true, 
+                        qua_id : id,
+                    },
+                    success: function (data) {
+                        if(data){
+                            swalWithBootstrapButtons.fire(
+                            'ลบสำเร็จ',
+                            '',
+                            'success'
+                            )
+                            reListTicket(projectName,proId)
+
+                        } else {
+                            swalWithBootstrapButtons.fire(
+                            'ลบไม่สำเร็จ',
+                            '',
+                            'error'
+                            )
+
+                        }
+                    },
+                })
+
+            } else if (
+                /* Read more about handling dismissals below */
+                result.dismiss === Swal.DismissReason.cancel
+            ) {
+                swalWithBootstrapButtons.fire(
+                'ยกเลิก',
+                '',
+                'error'
+                )
+            }
+            })
+        })
+
+        $(document).on("submit","#formTicket",function(e){
+            console.log("formTicket");
+            e.preventDefault()
+            let formTicket = $(this)
+            $.ajax({
+                url: "pages/project/dbTicket.php",
+                type: "POST",
+                data:  new FormData(this),
+                contentType: false,
+                cache: false,
+                processData:false,
+                success: function(data) {
+                    if(data){
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'รายงานปัญหาสำเร็จ',
+                            text: '',
+                            footer: ''   
+                        })
+                        $()
+                        //formTicket[0].reset();
+                        $("#topic").val("")
+                        $("#detail").val("")
+                        $("#files").val("")
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'ERROR เกิดข้อผิดพลาด',
+                            text: '',
+                            footer: ''   
+                        })
+                    }
+                }
+            })
+        })
+    })
+    // END ticket.php
 })
 function setEmpty() {
     $("#business_vat").val("")
@@ -223,4 +375,3 @@ function setEmpty() {
     $("#registration_date").val("")
     $("#capital").val("")
 }
-

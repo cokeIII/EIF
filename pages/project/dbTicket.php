@@ -10,7 +10,7 @@
         $yearQuarter = ceil($month / 3);
         $path = 'uploads/';
         $path = $path.strtolower($final_files); 
-        if(!empty($_FILES['files'])){
+        if(!empty($_FILES['files']['name'])){
             move_uploaded_file($tmp,$path);
         } else {
             $final_files = "";
