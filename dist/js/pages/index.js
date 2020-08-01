@@ -1,4 +1,5 @@
 $(document).ready(function(){
+    var proName,proId
     $(document).on('click','#project',function(){
         $('#mainContent').load("pages/project/project.php")
     })
@@ -32,6 +33,18 @@ $(document).ready(function(){
             },
         })
     })
+    $(document).on('click','#quarter',function(){
+        $.ajax({
+            type: 'post', 
+            dataType: "json",
+            url: 'pages/project/qua.php',
+            data: {},
+            success: function (data) {
+                $('#mainContent').html(data)
+                $("#tableQua").dataTable()         
+            },
+        })
+    })
     $(document).on('click','#indicator',function(){
         $.ajax({
             type: 'post', 
@@ -44,6 +57,100 @@ $(document).ready(function(){
             },
         })
     })
+    // quarter
+    function ajaxFormQua(proName,proId){
+        $.ajax({
+            type: 'post', 
+            dataType: "json",
+            url: 'pages/project/formQua.php',
+            data: {
+                ticket:true, 
+                projectName: proName,
+                proId: proId
+            },
+            success: function (data) {
+                $('#mainContent').html(data)
+            },
+        })
+    }
+
+    $(document).on('click','.btn-qua',function(){
+        proName = $(this).attr("proName")
+        proId = $(this).attr("proId")
+        ajaxFormQua(proName,proId)
+    })
+    $(document).on('click','.edit-qua',function(){
+        let topic = $(this).parents(".input-qua").find(".topicQua")
+        topic.prop( "disabled", false )
+        $(this).parents(".input-qua").find(".edit-qua-save").show()
+        $(this).hide()
+    })
+    $(document).on('click','.edit-qua-save',function(){
+        let detail = $(this).parents(".input-qua").find(".topicQua")
+        detail.prop( "disabled", true )
+        $(this).parents(".input-qua").find(".edit-qua").show()
+        $(this).hide()
+        $.ajax({
+            type: 'post', 
+            dataType: "json",
+            url: 'pages/project/dbQua.php',
+            data: {
+                editQua:true, 
+                detailQua: detail.val(),
+                qua_id: $(this).attr("val")
+            },
+            success: function (data) {
+                if(data == true){
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'บันทึกสำเร็จ',
+                        text: '',
+                        footer: ''   
+                    })
+                    ajaxFormQua(proName,proId)
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'ERROR เกิดข้อผิดพลาด',
+                        text: '',
+                        footer: ''   
+                    })
+                }
+            },
+        })
+    })
+
+    $(document).on('submit','#formQua',function(e){
+        e.preventDefault()
+        $.ajax({
+            url: "pages/project/dbQua.php",
+            type: "POST",
+            data:  new FormData(this),
+            contentType: false,
+            cache: false,
+            processData:false,
+            success: function(data) {
+                if(data == 'true'){
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'รายงานปัญหาสำเร็จ',
+                        text: '',
+                        footer: ''   
+                    })
+                    ajaxFormQua(proName,proId)
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'ERROR เกิดข้อผิดพลาด',
+                        text: '',
+                        footer: ''   
+                    })
+                }
+            }
+        })
+    })
+
+    // END quarter
     /// indicator
     function ajaxFormIndicator(proName,proId){
         $.ajax({
@@ -60,7 +167,7 @@ $(document).ready(function(){
             },
         })
     }
-    var proName,proId
+    
     $(document).on('click','.btn-indicator',function(){
         proName = $(this).attr("proName")
         proId = $(this).attr("proId")
@@ -122,7 +229,7 @@ $(document).ready(function(){
                 if(data == 'true'){
                     Swal.fire({
                         icon: 'success',
-                        title: 'รายงานปัญหาสำเร็จ',
+                        title: 'บันทึกสำเร็จ',
                         text: '',
                         footer: ''   
                     })

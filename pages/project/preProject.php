@@ -197,7 +197,7 @@
                         header    : {
                             left  : 'prev,next today',
                             center: 'title',
-                            right : 'dayGridMonth,timeGridWeek,timeGridDay'
+                            right : ''
                         },
                         'themeSystem': 'bootstrap',
                         //Random default events
