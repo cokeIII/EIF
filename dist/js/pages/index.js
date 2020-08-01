@@ -45,21 +45,159 @@ $(document).ready(function(){
         })
     })
     /// indicator
-    $(document).on('click','.btn-indicator',function(){
+    function ajaxFormIndicator(proName,proId){
         $.ajax({
             type: 'post', 
             dataType: "json",
             url: 'pages/project/formIndicator.php',
             data: {
                 ticket:true, 
-                projectName: $(this).attr("proName"),
-                proId: $(this).attr("proId")
+                projectName: proName,
+                proId: proId
             },
             success: function (data) {
                 $('#mainContent').html(data)
             },
         })
+    }
+    var proName,proId
+    $(document).on('click','.btn-indicator',function(){
+        proName = $(this).attr("proName")
+        proId = $(this).attr("proId")
+        ajaxFormIndicator(proName,proId)
+    })
 
+    $(document).on('click','.edit-indicator',function(){
+        let topic = $(this).parents(".input-indicator").find(".topicIndicator")
+        topic.prop( "disabled", false )
+        $(this).parents(".input-indicator").find(".edit-indicator-save").show()
+        $(this).hide()
+    })
+    $(document).on('click','.edit-indicator-save',function(){
+        let topic = $(this).parents(".input-indicator").find(".topicIndicator")
+        topic.prop( "disabled", true )
+        $(this).parents(".input-indicator").find(".edit-indicator").show()
+        $(this).hide()
+        $.ajax({
+            type: 'post', 
+            dataType: "json",
+            url: 'pages/project/dbIndicator.php',
+            data: {
+                editIndicator:true, 
+                topicIndicator: topic.val(),
+                qua_id: $(this).attr("val")
+            },
+            success: function (data) {
+                if(data == true){
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'บันทึกสำเร็จ',
+                        text: '',
+                        footer: ''   
+                    })
+                    ajaxFormIndicator(proName,proId)
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'ERROR เกิดข้อผิดพลาด',
+                        text: '',
+                        footer: ''   
+                    })
+                }
+            },
+        })
+
+    })
+
+    $(document).on('submit','#formIndicator',function(e){
+        e.preventDefault()
+        $.ajax({
+            url: "pages/project/dbIndicator.php",
+            type: "POST",
+            data:  new FormData(this),
+            contentType: false,
+            cache: false,
+            processData:false,
+            success: function(data) {
+                if(data == 'true'){
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'รายงานปัญหาสำเร็จ',
+                        text: '',
+                        footer: ''   
+                    })
+                    ajaxFormIndicator(proName,proId)
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'ERROR เกิดข้อผิดพลาด',
+                        text: '',
+                        footer: ''   
+                    })
+                }
+            }
+        })
+    })
+    $(document).on('click','.del-indicator',function(){
+
+        let id = $(this).attr("val")
+        let btn = $(this)
+        const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+            confirmButton: 'btn btn-success ml-2',
+            cancelButton: 'btn btn-danger'
+        },
+        buttonsStyling: false
+        })
+
+        swalWithBootstrapButtons.fire({
+        title: 'ต้องการลบ ใช่ หรือ ไม่ ?',
+        text: "",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'ลบ',
+        cancelButtonText: 'ยกเลิก',
+        reverseButtons: true
+        }).then((result) => {
+        if (result.value) {
+            $.ajax({
+                type: 'post', 
+                dataType: "json",
+                url: 'pages/project/dbIndicator.php',
+                data: {
+                    delIndicator:true, 
+                    qua_id : id,
+                },
+                success: function (data) {
+                    if(data){
+                        swalWithBootstrapButtons.fire(
+                        'ลบสำเร็จ',
+                        '',
+                        'success'
+                        )
+                        ajaxFormIndicator(proName,proId)
+                    } else {
+                        swalWithBootstrapButtons.fire(
+                        'ลบไม่สำเร็จ',
+                        '',
+                        'error'
+                        )
+
+                    }
+                },
+            })
+
+        } else if (
+            /* Read more about handling dismissals below */
+            result.dismiss === Swal.DismissReason.cancel
+        ) {
+            swalWithBootstrapButtons.fire(
+            'ยกเลิก',
+            '',
+            'error'
+            )
+        }
+        })
     })
     ///END indicator
     $(document).on('click','#register',function(){
@@ -73,6 +211,24 @@ $(document).ready(function(){
         //     'success'
         // )
     })
+    function setEmpty() {
+        $("#business_vat").val("")
+        $("#branch_number_vat").val("")
+        $("#business_name").val("")
+        $("#business_branch").val("")
+        $("#amount_emp").val("")
+        $("#job_description").val("")
+        $("#house_code").val("")
+        $("#address_no").val("")
+        $("#road").val("")
+        $("#land").val("")
+        $("#location").val("")
+        $("#email").val()
+        $("#business_phone").val("")
+        $("#registration_date").val("")
+        $("#capital").val("")
+    }
+    
     $("#formSearchVat").submit(function(e)  {
         $("#tableSearchVat").html('<div class="topic-search-vat mt-10">ค้นหาข้อมูลจากสรรพากร</div><div id="spinners" class="canter spinner loader"></div>')
         $("#spinners").show()

@@ -201,7 +201,6 @@
                             text: '',
                             footer: ''   
                         })
-                        setEmpty()
                     } else {
                         Swal.fire({
                             icon: 'error',
@@ -242,22 +241,6 @@
             )
         }
     })
-function setEmpty() {
-    $("#business_vat").val("")
-    $("#branch_number_vat").val("")
-    $("#business_name").val("")
-    $("#business_branch").val("")
-    $("#amount_emp").val("")
-    $("#job_description").val("")
-    $("#house_code").val("")
-    $("#address_no").val("")
-    $("#road").val("")
-    $("#land").val("")
-    $("#location").val("")
-    $("#email").val()
-    $("#business_phone").val("")
-    $("#registration_date").val("")
-    $("#capital").val("")
-}
+
 </script>
 

@@ -35,30 +35,52 @@ $jsonData.= '<div class="content-header">
         <div class="row ">
             <div class="col-md-12">
                 <div class="card" id="formProjects">
-                    <div class="card-body">
-                        <form id="formTicket" method="post" class="form-horizontal" action="">
-                            <input type="hidden" name="project_id" value="'.$id.'">
-                            <input type="hidden" name="formIndicator" value="true">
-                            <div class="form-group">';
+                    <div class="card-body">';
                             $no = 0;
                             if ($result->num_rows > 0) {
                                 
                                 while($row = $result->fetch_assoc()) {
                                 $jsonData.=' 
-                                <label for="topicIndicator" class="col-md-2 control-label h5">ตัวชี้วัดที่'.++$no.'</label>
-   
-                                <div class="input-group col-md-5">
-                                    <input  type="text" class="form-control" required="" id="topicIndicator" name="topicIndicator'.$no.'" value="" required="">
-                                </div>';
+                                <div class="form-group">
+                                    <label for="topicIndicator" class="col-md-2 control-label h5 mt-2">ตัวชี้วัดที่'.++$no.'</label>
+    
+                                    <div class="input-group col-md-5 input-indicator">
+                                        <input  type="text" class="form-control topicIndicator" required=""  name="topicIndicator'.$row["qua_id"].'" value="'.$row["topic"].'" required="" disabled>
+                                       
+                                        <a class="btn btn-info btn-sm edit-indicator ml-2" href="#">
+                                            <i class="fas fa-pencil-alt">
+                                            </i>
+                                            แก้ไข
+                                        </a>
+
+                                        <a class="btn btn-info btn-sm edit-indicator-save ml-2 collapse" href="#" val="'.$row["qua_id"].'">
+                                            <i class="fas fa-save">
+                                            </i>
+                                            บันทึก
+                                        </a>
+
+                                        <a class="btn btn-danger btn-sm del-indicator ml-2" href="#" val="'.$row["qua_id"].'">
+                                        <i class="fas fa-trash"></i>
+                                            ลบ
+                                        </a>
+                                    </div>
+
+                                </div>
+                                ';
                                 }
                                 
                             }
 
                             $jsonData.=' 
-                            <label for="topicIndicator" class="col-md-2 control-label h5">ตัวชี้วัดที่'.++$no.'</label>
+                            <form id="formIndicator" method="post" class="form-horizontal" action="">
+                            <input type="hidden" name="project_id" value="'.$id.'">
+                            <input type="hidden" name="formIndicator" value="true">
+                            <div class="form-group">
+
+                            <label for="topicIndicator" class="col-md-2 control-label h5 mt-2">ตัวชี้วัดที่'.++$no.'</label>
 
                             <div class="input-group col-md-5">
-                                <input  type="text" class="form-control" required="" id="topicIndicator" name="topicIndicator'.$no.'" value="" required="">
+                                <input  type="text" class="form-control" required="" id="topicIndicator" name="topicIndicator" value="" required="">
                             </div>';
 
                                 $jsonData.='
