@@ -75,6 +75,9 @@ $jsonData.='<div class="content-header">
                                         ไฟล์แนบ
                                     </th>
                                     <th style="width: 8%" class="text-center">
+                                        ไตรมาส
+                                    </th>
+                                    <th style="width: 8%" class="text-center">
                                         วันที่
                                     </th>
                                     <th style="width: 8%" class="text-center">
@@ -103,6 +106,9 @@ $jsonData.='<div class="content-header">
                                         $jsonData.='<a href="pages/project/uploads/'.$row["file_name"].'" class="btn btn-primary">ดาวโหลดไฟล์</a>';
                                     }
                                     $jsonData.='</td>
+                                    <td>
+                                        ไตรมาส '.$row["quater"].'
+                                    </td>
                                     <td>
                                         '.$row["qua_date"].'
                                     </td>

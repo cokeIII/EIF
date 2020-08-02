@@ -307,8 +307,18 @@
 </body>
 </html>
 <script>
-<?php require_once "dist/js/pages/ticket.js";?>
-$(function () {    
+$(document).ready(function(){
+  $.ajax({
+      type: 'post', 
+      dataType: "json",
+      url: 'dist/ajax.php',
+      data: {getCountProject: true},
+      success: function (data) {
+        console.log(data)
+      },
+  })
+})
+$(function () { 
   var areaChartData = {
       labels  : ['ยานยนต์สมัยใหม่', 'อิเล็กทรอนิกส์อัจฉริยะ', 'การท่องเที่ยว', 'การเกษตร', 'การแปรรูปอาหาร', 'หุ่นยนต์', 'โลจิสติกส์','ดิจิทัล','เชื้อเพลิงชีวภาพ','การแพทย์ครบวงจร'],
       datasets: [

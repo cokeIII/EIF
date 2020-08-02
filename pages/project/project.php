@@ -47,7 +47,7 @@
                         <div class="form-group">
                             <label for="objective" class="col-md-2 control-label h5">3. วัตถุประสงค์</label>
                             <div class="input-group col-md-5">
-                                <textarea name="reason" class="form-control" id="reason" cols="30" rows="5" required=""></textarea>
+                                <textarea name="reason" class="form-control" id="objective" cols="30" rows="5" required=""></textarea>
                             </div>
                         </div>
                         <hr class="hr">
@@ -127,120 +127,5 @@
     <!-- /.row (main row) -->
     </div><!-- /.container-fluid -->
 </section>
-<script>
-    $(document).ready(function(){
-        addPerson(1)
-        addBudget(1)
-        let valPerson = 0
-        let valBudget = 0
-        $("#personsNum").change(function(){
-            if($(this).val() > valPerson){
-                addPerson($(this).val())
-            } else {
-                $("#inputPerson").find("div[rid='"+$(this).val()+"']").remove()
-            }
-            valPerson = $(this).val()
-        })
-        
-        $("#budgetNum").change(function(){
-            if($(this).val() > valBudget){
-                addBudget($(this).val())
-            } else {
-                $("#inputBudget").find("div[rid='"+$(this).val()+"']").remove()
-            }
-            valBudget = $(this).val()
-        })  
 
-        $("#formProjectInsert").submit(function(e){
-            let person = {}
-            let budget = {}
-            let rowPerson
-            let rowBudget
-            console.log("formProjectInsert")
-            budget.sumPrice = $("#budget").val() 
-            $("#inputPerson").find(".addPerson").each(function( index ) {
-                if(rowPerson !=  $( this ).attr('rows')){
-                    rowPerson = $( this ).attr('rows')
-                    person[$( this ).attr('rows')] = {}
-                }
-                person[$( this ).attr('rows')][$( this ).attr('id')] = $( this ).val()
-            }); 
-            $("#inputBudget").find(":input").each(function( index ) {
-                if(rowBudget !=  $( this ).attr('rows')){
-                    rowBudget = $( this ).attr('rows')
-                    budget[$( this ).attr('rows')] = {}
-                }
-                budget[$( this ).attr('rows')][$( this ).attr('id')]=$( this ).val()
-            }); 
-            console.log(budget)
-            e.preventDefault()
-            $.ajax({
-                type: 'post', 
-                dataType: "json",
-                url: 'pages/project/dbProject.php',
-                data: {
-                    submit:"formProjectInsert", 
-                    projectName: $("#projectName").val(),
-                    reason: $("#reason").val(),
-                    maingoal: $("#mainGoal").val(),
-                    persons: person,
-                    start_duration: $("#startDuration").val(),
-                    end_duration: $("#endDuration").val(),
-                    budget: budget,
-                    product: $("#product").val(),
-                    indicator: $("#indicator").val(),
-                    locations: $("#location").val(),
-                    busi_id: $("#busi_id").val(),
-                    branch_no: $("#branch_no").val(),
-                },
-                success: function (data) {
-                    if(data){
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'เสนอโครงการสำเร็จ',
-                            text: '',
-                            footer: ''   
-                        })
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'ERROR เกิดข้อผิดพลาด',
-                            text: '',
-                            footer: ''   
-                        })
-                    }
-                },
-            })
-
-        }) 
-        function addPerson(i){
-            $("#inputPerson").append(
-                '<div class="row" rid="'+i+'">'+
-                    '<label for="perName" class="col-md-2 control-label">ชื่อผู้รับผิดชอบ</label>'+
-                    '<input rows="'+i+'" type="text" class="addPerson col-md-3 mt-1 form-control" required="" id="perName" name="perName" value="" placeholder="ชื่อผู้รับผิดชอบ หรือหน่วยงาน" required="">'+
-                    '<label for="tel" class="mr-1 col-md-1 control-label">โทรศัพท์ </label>'+
-                    '<input rows="'+i+'" type="tel" class="addPerson col-md-2 mt-1 form-control" required="" id="tel" name="tel" value="" required="">'+
-                    '<label for="email" class="col-md-1 control-label">E-mail</label>'+
-                    '<input rows="'+i+'" type="email" class="addPerson col-md-2 mt-1 form-control" required="" id="email" name="email" value="" required="">'+
-                '</div>'
-            )
-        }
-
-        function addBudget(i){
-            $("#inputBudget").append(
-                '<div class="row" rid="'+i+'">'+
-                    ''+
-                    '<input rows="'+i+'" type="text" class="addBudget col-md-2 mt-1 form-control" required="" id="disBudget" name="disBudget" value="" placeholder="ค่าอาหารและเครื่องดื่ม" required="">'+
-                    '<label for="num" class="mr-1 col-md-1 control-label">จำนวน</label>'+
-                    '<input rows="'+i+'" type="number" class="addBudget col-md-1 mt-1 form-control" required="" id="num" name="num" value="" required="">'+
-                    '<label for="unit" class="mr-1 col-md-1 control-label">หน่วยนับ</label>'+
-                    '<input rows="'+i+'" type="text" class="addBudget col-md-1 mt-1 form-control" required="" id="unit" name="unit" value="" placeholder="มื้อ" required="">'+
-                    '<label for="price" class="col-md-2 control-label">ราคาหน่วยละ</label>'+
-                    '<input rows="'+i+'" type="number" class="addBudget col-md-2 mt-1 form-control" required="" id="price" name="price" value="" required="">'+
-                '</div>'
-            )
-        }
-    })
-
-</script>
 

@@ -52,9 +52,6 @@
                                     <th style="width: 15%">
                                         ผู้รับผิดชอบ
                                     </th>
-                                    <th style="width: 10%">
-                                        ความคืบหน้า
-                                    </th>
                                     <th style="width: 8%" class="text-center">
                                         สถานะ
                                     </th>
@@ -82,15 +79,6 @@
                                             echo "<p>".$value["perName"]."</p>";
                                         }
                                         ?>
-                                    </td>
-                                    <td class="project_progress">
-                                        <div class="progress progress-sm">
-                                            <div class="progress-bar bg-green" role="progressbar" aria-volumenow="0" aria-volumemin="0" aria-volumemax="100" style="width: 0%">
-                                            </div>
-                                        </div>
-                                        <small>
-                                            0% Complete
-                                        </small>
                                     </td>
                                     <td class="project-state">
                                         <?php 
@@ -121,16 +109,18 @@
                                             }
                                          }
                                          ?>
-                                        <a class="btn btn-info btn-sm" href="#">
+                                         <?php if(isset($_SESSION["status"]) && $_SESSION["status"] == "admin" || $row["pro_status"] == "รอการอนุมัติ"){?>
+                                        <a class="btn btn-info btn-sm edit-project" val="<?php echo $row["project_id"]; ?>">
                                             <i class="fas fa-pencil-alt">
                                             </i>
                                             แก้ไข
                                         </a>
-                                        <a class="btn btn-danger btn-sm" href="#">
+                                        <a class="btn btn-danger btn-sm btn-delProject" val="<?php echo $row["project_id"]; ?>">
                                             <i class="fas fa-trash">
                                             </i>
                                             ลบ
                                         </a>
+                                        <?php }?>
                                     </td>
                                 </tr>
                             <?php } 

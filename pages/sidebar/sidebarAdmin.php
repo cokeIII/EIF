@@ -32,7 +32,7 @@
             <p>รายงานปัญหาโครงการ</p>
           </a>
         </li>
-        <li class="nav-item" id="indicator">
+        <li class="nav-item" id="indicatorMenu">
           <a href="#" class="nav-link active" >
             <i class="far fa-circle nav-icon"></i>
             <p>กำหนดตัวชี้วัดโครงการ</p>
@@ -54,6 +54,23 @@
           <a href="#" class="nav-link active" >
             <i class="far fa-circle nav-icon"></i>
             <p>รายชื่อ</p>
+          </a>
+        </li>
+      </ul>
+    </li>
+    <li class="nav-item has-treeview menu-open">
+      <a href="#" class="nav-link active color-menu">
+      <i class="fas fa-file-alt"></i>
+        <p>
+          รายงาน
+          <i class="right fas fa-angle-left"></i>
+        </p>
+      </a>
+      <ul class="nav nav-treeview">
+        <li class="nav-item" id="reportQua">
+          <a href="#" class="nav-link active" >
+            <i class="far fa-circle nav-icon"></i>
+            <p>สรุปแต่ละไตรมาส</p>
           </a>
         </li>
       </ul>

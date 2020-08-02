@@ -1,7 +1,38 @@
 $(document).ready(function(){
+    function addPerson(i){
+        $(document).find("#inputPerson").append(
+            '<div class="row" rid="'+i+'">'+
+                '<label for="perName" class="col-md-2 control-label">ชื่อผู้รับผิดชอบ</label>'+
+                '<input rows="'+i+'" type="text" class="addPerson col-md-3 mt-1 form-control" required="" id="perName" name="perName" value="" placeholder="ชื่อผู้รับผิดชอบ หรือหน่วยงาน" required="">'+
+                '<label for="tel" class="mr-1 col-md-1 control-label">โทรศัพท์ </label>'+
+                '<input rows="'+i+'" type="tel" class="addPerson col-md-2 mt-1 form-control" required="" id="tel" name="tel" value="" required="">'+
+                '<label for="email" class="col-md-1 control-label">E-mail</label>'+
+                '<input rows="'+i+'" type="email" class="addPerson col-md-2 mt-1 form-control" required="" id="email" name="email" value="" required="">'+
+            '</div>'
+        )
+    }
+
+    function addBudget(i){
+        $(document).find("#inputBudget").append(
+            '<div class="row" rid="'+i+'">'+
+                ''+
+                '<input rows="'+i+'" type="text" class="addBudget col-md-2 mt-1 form-control" required="" id="disBudget" name="disBudget" value="" placeholder="ค่าอาหารและเครื่องดื่ม" required="">'+
+                '<label for="num" class="mr-1 col-md-1 control-label">จำนวน</label>'+
+                '<input rows="'+i+'" type="number" class="addBudget col-md-1 mt-1 form-control" required="" id="num" name="num" value="" required="">'+
+                '<label for="unit" class="mr-1 col-md-1 control-label">หน่วยนับ</label>'+
+                '<input rows="'+i+'" type="text" class="addBudget col-md-1 mt-1 form-control" required="" id="unit" name="unit" value="" placeholder="มื้อ" required="">'+
+                '<label for="price" class="col-md-2 control-label">ราคาหน่วยละ</label>'+
+                '<input rows="'+i+'" type="number" class="addBudget col-md-2 mt-1 form-control" required="" id="price" name="price" value="" required="">'+
+            '</div>'
+        )
+    }
+
     var proName,proId
     $(document).on('click','#project',function(){
-        $('#mainContent').load("pages/project/project.php")
+        $('#mainContent').load("pages/project/project.php",function(){
+            addPerson(1)
+            addBudget(1)
+        })
     })
     $(document).on('click','#eec',function(){
         $('#mainContent').load("pages/about/eec.php")
@@ -20,6 +51,18 @@ $(document).ready(function(){
     })
     $(document).on('click','#preProjectAd',function(){
         $('#mainContent').load("pages/project/preProject.php")
+    })
+    $(document).on('click','#reportQua',function(){
+        $.ajax({
+            type: 'post', 
+            dataType: "json",
+            url: 'pages/report/quaReport.php',
+            data: {},
+            success: function (data) {
+                $('#mainContent').html(data)
+                $("#tableReportQua").dataTable()        
+            },
+        })
     })
     $(document).on('click','#ticket',function(){
         $.ajax({
@@ -45,7 +88,7 @@ $(document).ready(function(){
             },
         })
     })
-    $(document).on('click','#indicator',function(){
+    $(document).on('click','#indicatorMenu',function(){
         $.ajax({
             type: 'post', 
             dataType: "json",
@@ -57,7 +100,362 @@ $(document).ready(function(){
             },
         })
     })
-    // quarter
+    /// del Qua User
+    $(document).on('click','.del-qua-user',function(){
+
+        let id = $(this).attr("val")
+
+        const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+            confirmButton: 'btn btn-success ml-2',
+            cancelButton: 'btn btn-danger'
+        },
+        buttonsStyling: false
+        })
+
+        swalWithBootstrapButtons.fire({
+        title: 'ต้องการลบ ใช่ หรือ ไม่ ?',
+        text: "",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'ลบ',
+        cancelButtonText: 'ยกเลิก',
+        reverseButtons: true
+        }).then((result) => {
+        if (result.value) {
+            $.ajax({
+                type: 'post', 
+                dataType: "json",
+                url: 'pages/project/dbQua.php',
+                data: {delQuaUser: true, qua_id: id},
+                success: function (data) {
+                    if(data == true){
+                        swalWithBootstrapButtons.fire(
+                        'ลบสำเร็จ',
+                        '',
+                        'success'
+                        )
+                        ajaxFormQua(proName,proId) 
+                    } else {
+                        swalWithBootstrapButtons.fire(
+                        'ลบไม่สำเร็จ',
+                        '',
+                        'error'
+                        )
+
+                    }    
+                },
+            })
+
+        } else if (
+            /* Read more about handling dismissals below */
+            result.dismiss === Swal.DismissReason.cancel
+        ) {
+            swalWithBootstrapButtons.fire(
+            'ยกเลิก',
+            '',
+            'error'
+            )
+        }
+        })
+
+    })
+    /// End Qua User
+
+    /// del Project
+    $(document).on('click','.btn-delProject',function(){
+        let id = $(this).attr("val")
+
+        const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+            confirmButton: 'btn btn-success ml-2',
+            cancelButton: 'btn btn-danger'
+        },
+        buttonsStyling: false
+        })
+
+        swalWithBootstrapButtons.fire({
+        title: 'ต้องการลบ ใช่ หรือ ไม่ ?',
+        text: "",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'ลบ',
+        cancelButtonText: 'ยกเลิก',
+        reverseButtons: true
+        }).then((result) => {
+        if (result.value) {
+            $.ajax({
+                type: 'post', 
+                dataType: "json",
+                url: 'pages/project/dbProject.php',
+                data: {
+                    delProject:true, 
+                    project_id : id,
+                },
+                success: function (data) {
+                    if(data == true){
+                        swalWithBootstrapButtons.fire(
+                        'ลบสำเร็จ',
+                        '',
+                        'success'
+                        )
+                        $('#mainContent').load("pages/project/preProject.php")
+                    } else {
+                        swalWithBootstrapButtons.fire(
+                        'ลบไม่สำเร็จ',
+                        '',
+                        'error'
+                        )
+
+                    }
+                },
+            })
+
+        } else if (
+            /* Read more about handling dismissals below */
+            result.dismiss === Swal.DismissReason.cancel
+        ) {
+            swalWithBootstrapButtons.fire(
+            'ยกเลิก',
+            '',
+            'error'
+            )
+        }
+        })
+    })
+    /// End Project
+    /// project
+    let valPerson = 0
+    let valBudget = 0
+
+    $(document).on("change","#personsNum",function(){
+        if($(this).val() > valPerson){
+            addPerson($(this).val())
+        } else {
+            $("#inputPerson").find("div[rid='"+$(this).val()+"']").remove()
+        }
+        valPerson = $(this).val()
+    })
+    
+    $(document).on("change","#budgetNum",function(){
+        if($(this).val() > valBudget){
+            addBudget($(this).val())
+        } else {
+            $("#inputBudget").find("div[rid='"+$(this).val()+"']").remove()
+        }
+        valBudget = $(this).val()
+    })  
+
+    $(document).on("submit","#formProjectInsert",function(e){
+        console.log("formProjectInsert")
+        let person = {}
+        let budget = {}
+        let rowPerson
+        let rowBudget
+        budget.sumPrice = $("#budget").val() 
+        $("#inputPerson").find(".addPerson").each(function( index ) {
+            if(rowPerson !=  $( this ).attr('rows')){
+                rowPerson = $( this ).attr('rows')
+                person[$( this ).attr('rows')] = {}
+            }
+            person[$( this ).attr('rows')][$( this ).attr('id')] = $( this ).val()
+        }); 
+        $("#inputBudget").find(":input").each(function( index ) {
+            if(rowBudget !=  $( this ).attr('rows')){
+                rowBudget = $( this ).attr('rows')
+                budget[$( this ).attr('rows')] = {}
+            }
+            budget[$( this ).attr('rows')][$( this ).attr('id')]=$( this ).val()
+        }); 
+        e.preventDefault()
+        $.ajax({
+            type: 'post', 
+            dataType: "json",
+            url: 'pages/project/dbProject.php',
+            data: {
+                submit:"formProjectInsert", 
+                projectName: $("#projectName").val(),
+                reason: $("#reason").val(),
+                objective : $("#objective").val(),
+                maingoal: $("#mainGoal").val(),
+                persons: person,
+                start_duration: $("#startDuration").val(),
+                end_duration: $("#endDuration").val(),
+                budget: budget,
+                product: $("#product").val(),
+                indicator: $("#indicator").val(),
+                locations: $("#location").val(),
+                busi_id: $("#busi_id").val(),
+                branch_no: $("#branch_no").val(),
+            },
+            success: function (data) {
+                if(data){
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'เสนอโครงการสำเร็จ',
+                        text: '',
+                        footer: ''   
+                    })
+                    $('#formProjectInsert')[0].reset()
+
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'ERROR เกิดข้อผิดพลาด',
+                        text: '',
+                        footer: ''   
+                    })
+                }
+            },
+        })
+
+    }) 
+
+    /// End Project
+
+    ///edit Project
+    $(document).on('click','.edit-project',function(){
+        $.ajax({
+            type: 'post', 
+            dataType: "json",
+            url: 'pages/project/editProject.php',
+            data: {project_id : $(this).attr("val"),},
+            success: function (data) {
+                $('#mainContent').html(data)      
+            },
+        })
+    })
+
+    $(document).on("submit","#formProjectEdit",function(e){
+        let person = {}
+        let budget = {}
+        let rowPerson
+        let rowBudget
+        budget.sumPrice = $("#editBudget").val() 
+        $("#inputPerson").find(".addPerson").each(function( index ) {
+            if(rowPerson !=  $( this ).attr('rows')){
+                rowPerson = $( this ).attr('rows')
+                person[$( this ).attr('rows')] = {}
+            }
+            person[$( this ).attr('rows')][$( this ).attr('id')] = $( this ).val()
+        }); 
+        $("#inputBudget").find(":input").each(function( index ) {
+            if(rowBudget !=  $( this ).attr('rows')){
+                rowBudget = $( this ).attr('rows')
+                budget[$( this ).attr('rows')] = {}
+            }
+            budget[$( this ).attr('rows')][$( this ).attr('id')]=$( this ).val()
+        }); 
+        e.preventDefault()
+        $.ajax({
+            type: 'post', 
+            dataType: "json",
+            url: 'pages/project/dbProject.php',
+            data: {
+                formProjectEdit:true, 
+                project_id: $("#project_id").val(),
+                projectName: $("#editProjectName").val(),
+                reason: $("#editReason").val(),
+                objective : $("#editObjective").val(),
+                maingoal: $("#editMainGoal").val(),
+                persons: person,
+                start_duration: $("#editStartDuration").val(),
+                end_duration: $("#editEndDuration").val(),
+                budget: budget,
+                product: $("#editProduct").val(),
+                indicator: $("#editIndicator").val(),
+                locations: $("#editLocation").val()
+            },
+            success: function (data) {
+                if(data == true){
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'แก้ไขโครงการสำเร็จ',
+                        text: '',
+                        footer: ''   
+                    })
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'ERROR เกิดข้อผิดพลาด',
+                        text: '',
+                        footer: ''   
+                    })
+                }
+            },
+        })
+
+    }) 
+
+    /// End Project
+
+    /// quaReport
+    
+    let project_id
+    
+    $(document).on('click','.btn-report',function(){
+        project_id = $(this).attr('val')
+        $.ajax({
+            type: 'post', 
+            dataType: "json",
+            url: 'pages/report/detailQua.php',
+            data: {project_id: project_id },
+            success: function (data) {
+                $('#mainContent').html(data) 
+                $("#tableDetailReport").dataTable()      
+            },
+        })
+    })
+    $(document).on("change","#qua_select",function(){
+        $.ajax({
+            type: 'post', 
+            dataType: "json",
+            url: 'pages/report/detailQua.php',
+            data: {
+                project_id: project_id,
+                qua_select: $(this).val() 
+            },
+            success: function (data) {
+                $('#mainContent').html(data) 
+                $("#tableDetailReport").dataTable()      
+            },
+        })
+    })
+
+    $(document).on("change","#Y_select",function(){
+        $.ajax({
+            type: 'post', 
+            dataType: "json",
+            url: 'pages/report/detailQua.php',
+            data: {
+                project_id: project_id,
+                Y_select: $(this).val() 
+            },
+            success: function (data) {
+                $('#mainContent').html(data) 
+                $("#tableDetailReport").dataTable()      
+            },
+        })
+    })
+    
+    $(document).on("change","#status_select",function(){
+        $.ajax({
+            type: 'post', 
+            dataType: "json",
+            url: 'pages/report/detailQua.php',
+            data: {
+                project_id: project_id,
+                status_select: $(this).val() 
+            },
+            success: function (data) {
+                $('#mainContent').html(data) 
+                $("#tableDetailReport").dataTable()      
+            },
+        })
+    })
+
+    /// End quaReport
+    /// quarter
     function ajaxFormQua(proName,proId){
         $.ajax({
             type: 'post', 
@@ -79,12 +477,60 @@ $(document).ready(function(){
         proId = $(this).attr("proId")
         ajaxFormQua(proName,proId)
     })
+
     $(document).on('click','.edit-qua',function(){
         let topic = $(this).parents(".input-qua").find(".topicQua")
         topic.prop( "disabled", false )
         $(this).parents(".input-qua").find(".edit-qua-save").show()
         $(this).hide()
     })
+
+    $(document).on('click','.edit-qua-user',function(){
+        let topicQua = $(this).parents(".input-qua").find(".topicQua")
+        let detailQua = $(this).parents(".input-qua").find(".detailQua")
+        topicQua.prop( "disabled", false )
+        detailQua.prop( "disabled", false )
+        $(this).parents(".input-qua").find(".edit-qua-save-user").show()
+        $(this).hide()
+    })
+
+    $(document).on('click','.edit-qua-save-user',function(){
+        let topicQua = $(this).parents(".input-qua").find(".topicQua")
+        let detailQua = $(this).parents(".input-qua").find(".detailQua")
+        topicQua.prop( "disabled", true )
+        $(this).parents(".input-qua").find(".edit-qua").show()
+        $(this).hide()
+        $.ajax({
+            type: 'post', 
+            dataType: "json",
+            url: 'pages/project/dbQua.php',
+            data: {
+                editQuaUser:true, 
+                topicQua: topicQua.val(),
+                detailQua: detailQua.val(),
+                qua_id: $(this).attr("val")
+            },
+            success: function (data) {
+                if(data == true){
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'บันทึกสำเร็จ',
+                        text: '',
+                        footer: ''   
+                    })
+                    ajaxFormQua(proName,proId)
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'ERROR เกิดข้อผิดพลาด',
+                        text: '',
+                        footer: ''   
+                    })
+                }
+            },
+        })
+    })
+
     $(document).on('click','.edit-qua-save',function(){
         let detail = $(this).parents(".input-qua").find(".topicQua")
         detail.prop( "disabled", true )
@@ -133,7 +579,7 @@ $(document).ready(function(){
                 if(data == 'true'){
                     Swal.fire({
                         icon: 'success',
-                        title: 'รายงานปัญหาสำเร็จ',
+                        title: 'บันทึกสำเร็จ',
                         text: '',
                         footer: ''   
                     })
@@ -149,7 +595,6 @@ $(document).ready(function(){
             }
         })
     })
-
     // END quarter
     /// indicator
     function ajaxFormIndicator(proName,proId){
@@ -226,22 +671,13 @@ $(document).ready(function(){
             cache: false,
             processData:false,
             success: function(data) {
-                if(data == 'true'){
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'บันทึกสำเร็จ',
-                        text: '',
-                        footer: ''   
-                    })
-                    ajaxFormIndicator(proName,proId)
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'ERROR เกิดข้อผิดพลาด',
-                        text: '',
-                        footer: ''   
-                    })
-                }
+                Swal.fire({
+                    icon: 'success',
+                    title: 'บันทึกสำเร็จ',
+                    text: '',
+                    footer: ''   
+                })
+                ajaxFormIndicator(proName,proId)
             }
         })
     })
@@ -276,7 +712,7 @@ $(document).ready(function(){
                     qua_id : id,
                 },
                 success: function (data) {
-                    if(data){
+                    if(data == true){
                         swalWithBootstrapButtons.fire(
                         'ลบสำเร็จ',
                         '',

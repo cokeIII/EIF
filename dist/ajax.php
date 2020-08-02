@@ -68,4 +68,25 @@
             echo json_encode(false);
         }
     }
+
+    if(isset($_POST["getCountProject"])){
+        if(isset($_POST["status"])){
+            $status = $_POST["status"];
+            $sql = "select count(Project_id) as countProject from project where pro_status = '$status'";
+        } else {
+            $sql = "select count(Project_id) as countProject from project";
+        }
+        $result = $conn->query($sql);
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            $json_result["countProject"] = $row['countProject'];
+
+            $json_result["status"] = true;
+
+        } else {
+            $json_result["status"] = false;
+        }
+        echo json_encode($json_result);
+
+    }
 ?>
