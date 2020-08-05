@@ -69,6 +69,17 @@
         }
     }
 
+    if(isset($_POST["disApprove"])){
+        $id = $_POST["projectId"];
+        $sql = "update project set pro_status = 'ไม่ผ่านการอนุมัติ' where project_id ='$id'";
+        $result = $conn->query($sql);
+        if ($result > 0) {
+            echo json_encode(true);
+        } else {
+            echo json_encode(false);
+        }
+    }
+
     if(isset($_POST["getCountProject"])){
         if(isset($_POST["status"])){
             $status = $_POST["status"];

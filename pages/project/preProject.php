@@ -1,4 +1,3 @@
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <?php 
     require_once "../conf.php";
     require_once "../connect.php";
@@ -13,29 +12,25 @@
         }
     } 
     $result = $conn->query($sql);
-?>
+$jsonData =  "" ;
 
-<div class="content-header">
+$jsonData.='<div class="content-header">
     <div class="container-fluid">
     <div class="row mb-2">
         <div class="col-sm-6">
         <h1 class="m-0 text-dark">โครงการที่เสนอ</h1>
-        </div><!-- /.col -->
+        </div>
         <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="index.php">Home</a></li>
             <li class="breadcrumb-item active">โครงการ</li>
         </ol>
-        </div><!-- /.col -->
-    </div><!-- /.row -->
-    </div><!-- /.container-fluid -->
+        </div>
+    </div>
+    </div>
 </div>
-<!-- /.content-header -->
 <section class="content">
     <div class="container-fluid">
-    <!-- Small boxes (Stat box) -->
-    <!-- /.row -->
-    <!-- Main row -->
         <div class="row ">
             <div class="col-md-12">
                 <div class="card" id="formProjects">
@@ -59,175 +54,96 @@
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody>
-                            <?php
+                            <tbody>';
+                            
                             if ($result->num_rows > 0) {
                                 $no = 0;
                                 while($row = $result->fetch_assoc()) {
-                            ?>
-                                <tr>
+                            
+                                $jsonData.='<tr>
                                     <td>
-                                        <?php echo ++$no;?>
+                                        '.++$no.'
                                     </td>
                                     <td>
-                                        <?php echo $row["project_name"];?>
+                                        '.$row["project_name"].'
                                     </td>
-                                    <td>
-                                        <?php
+                                    <td>';
+                                        
                                         $someArray = json_decode($row["persons"], true);
                                         foreach ($someArray as $key => $value) {
-                                            echo "<p>".$value["perName"]."</p>";
+                                            $jsonData.='<p>'.$value["perName"].'</p>';
                                         }
-                                        ?>
+                                    $jsonData.='
                                     </td>
-                                    <td class="project-state">
-                                        <?php 
+                                    <td class="project-state">';
+                                        
                                             $classStatus = "";
-                                            if($row["pro_status"] == "ผ่านการอนุมัติ"){
+                                            if($row["pro_status"] == "ผ่านการอนุมัติ" || $row["pro_status"] == "ดำเนินงานแล้วเสร็จ"){
                                                 $classStatus = "badge-success";
                                             } else if($row["pro_status"] == "รอการอนุมัติ"){
                                                 $classStatus = "badge-warning";
+                                            } else if($row["pro_status"] == "ไม่ผ่านการอนุมัติ"){
+                                                $classStatus = "badge-danger";
+                                            } else if($row["pro_status"] == "ขั้นดำเนินกิจกรรม"){
+                                                $classStatus = "badge-info";
                                             }
-                                        ?>
-                                        <span class="badge <?php echo $classStatus;?>"><?php echo $row["pro_status"];?></span>
+                                $jsonData.='
+                                        <span class="badge '.$classStatus.'">'.$row["pro_status"].'</span>
                                     </td>
                                     <td class="project-actions text-right">
-                                        <a class="btn btn-primary btn-sm viewProject" href="#"  val="<?php echo $row["project_id"]; ?>">
-                                            <i class="fas fa-folder">
-                                            </i>
-                                            รายละเอียด
-                                        </a>
-                                        <?php if(isset($_SESSION["status"]) && $_SESSION["status"] == "admin"){
-                                            if($row["pro_status"] == "รอการอนุมัติ"){
-                                        ?>
-                                            <a class="btn btn-success btn-sm approve" href="#"  val="<?php echo $row["project_id"]; ?>">
-                                                <i class="fas fa-check">
+                                        <div class="row">
+                                            <a class="ml-3 btn btn-primary btn-sm viewProject" href="#"  val="'.$row["project_id"].'">
+                                                <i class="fas fa-folder">
                                                 </i>
-                                                อนุมัติ
-                                            </a>
-                                        <?php 
+                                                รายละเอียด
+                                            </a>';
+                                            if(isset($_SESSION["status"]) && $_SESSION["status"] == "admin"){
+                                                if($row["pro_status"] == "รอการอนุมัติ"){
+                                                $jsonData.='
+                                                <a class="ml-3 btn btn-success btn-sm approve" href="#"  val="'.$row["project_id"].'">
+                                                    <i class="fas fa-check">
+                                                    </i>
+                                                    อนุมัติ
+                                                </a>
+                                                <a class="ml-3 btn btn-danger btn-sm disApprove" href="#"  val="'.$row["project_id"].'">
+                                                    <i class="fas fa-check">
+                                                    </i>
+                                                    ไม่อนุมัติ
+                                                </a>';
+                                            
+                                                } else if($row["pro_status"] == "ไม่ผ่านการอนุมัติ"){
+                                                    $jsonData.='<a class="ml-3 btn btn-success btn-sm approve" href="#"  val="'.$row["project_id"].'">
+                                                        <i class="fas fa-check">
+                                                        </i>
+                                                        อนุมัติ
+                                                    </a>';
+                                                }
                                             }
-                                         }
-                                         ?>
-                                         <?php if(isset($_SESSION["status"]) && $_SESSION["status"] == "admin" || $row["pro_status"] == "รอการอนุมัติ"){?>
-                                        <a class="btn btn-info btn-sm edit-project" val="<?php echo $row["project_id"]; ?>">
-                                            <i class="fas fa-pencil-alt">
-                                            </i>
-                                            แก้ไข
-                                        </a>
-                                        <a class="btn btn-danger btn-sm btn-delProject" val="<?php echo $row["project_id"]; ?>">
-                                            <i class="fas fa-trash">
-                                            </i>
-                                            ลบ
-                                        </a>
-                                        <?php }?>
+                                        $jsonData.='</div>
+                                        <div class="row">';
+                                            if(isset($_SESSION["status"]) && $_SESSION["status"] == "admin" || $row["pro_status"] == "รอการอนุมัติ" || $row["pro_status"] == "ไม่ผ่านการอนุมัติ"){
+                                            $jsonData.='<a class="ml-3 mt-3 btn btn-info btn-sm edit-project" val="'.$row["project_id"].'">
+                                                <i class="fas fa-pencil-alt">
+                                                </i>
+                                                แก้ไข
+                                            </a>
+                                            <a class="ml-3 mt-3 btn btn-danger btn-sm btn-delProject" val="'.$row["project_id"].'">
+                                                <i class="fas fa-trash">
+                                                </i>
+                                                ลบ
+                                            </a>';
+                                             }
+                                        $jsonData.='</div>
                                     </td>
-                                </tr>
-                            <?php } 
-                            }?>
-                            </tbody>
+                                </tr>';
+                                } 
+                            }
+                            $jsonData.='</tbody>
                         </table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</section>
-
-<script>
-    $(document).ready(function(){
-        $("#tablePrePro").dataTable()
-        $(document).on("click",".viewProject",function(){
-            $.ajax({
-                type: 'post', 
-                dataType: "json",
-                url: 'pages/project/viewProject.php',
-                data: {
-                    viewProject:true, 
-                    projectId: $(this).attr("val"),
-                },
-                success: function (data) {
-                    $('#mainContent').html(data.content)         
-                    var date = new Date()
-                    var d    = date.getDate(),
-                        m    = date.getMonth(),
-                        y    = date.getFullYear()
-
-                    var Calendar = FullCalendar.Calendar;
-                    
-                    var calendarEl = document.getElementById('calendar');
-                    let i = 0,dateData=[];
-                    $.each(data.calendar,function(index,value){
-                        let newDate = value.split('-')
-
-                        if(index == "start_duration"){
-                            $("#dateDetail").append('<p>วันเริ่มโครงการ : '+newDate[2]+"/"+newDate[1]+"/"+newDate[0]+"</p>")
-                            dateData[i]={
-                                title          : 'วันเริ่มโครงการ',
-                                start          : new Date(newDate[0], newDate[1]-1,newDate[2]),
-                                allDay         : false,
-                                backgroundColor: '#0073b7', //Blue
-                                borderColor    : '#0073b7' //Blue
-                            }
-                        } else if(index == "end_duration") {
-                            $("#dateDetail").append('<p>วันสิ้นสุดโครงการ : '+newDate[2]+"/"+newDate[1]+"/"+newDate[0]+"</p>")
-                            dateData[i]={
-                                title          : 'วันสิ้นสุดโครงการ',
-                                start          : new Date(newDate[0], newDate[1]-1,newDate[2]),
-                                allDay         : false,
-                                backgroundColor: '#0073b7', //Blue
-                                borderColor    : '#0073b7' //Blue
-                            }
-                        }
-                        i++
-                    })
-                    
-                    var calendar = new Calendar(calendarEl, {
-                        plugins: [ 'bootstrap', 'interaction', 'dayGrid', 'timeGrid' ],
-                        header    : {
-                            left  : 'prev,next today',
-                            center: 'title',
-                            right : ''
-                        },
-                        'themeSystem': 'bootstrap',
-                        //Random default events
-                        events    : dateData,
-                    });
-
-                    calendar.render();
-
-                },
-            })
-
-        })
-        $(document).on("click",".approve",function(){
-            let item = $(this)
-            $.ajax({
-                type: 'post', 
-                dataType: "json",
-                url: 'dist/ajax.php',
-                data: {approve:true, projectId: $(this).attr("val")},
-                success: function (data) {
-                    if(data){
-                        item.hide()
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'อนุมัติสำเร็จ',
-                            text: '',
-                            footer: ''   
-                        })
-                        $('#mainContent').load("pages/project/preProject.php")
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'อนุมัติไม่สำเร็จ',
-                            text: '',
-                            footer: ''   
-                        })
-                    }        
-                },
-            })
-        })
-
-    })
-</script>
+</section>';
+echo json_encode($jsonData);

@@ -133,7 +133,7 @@
             <!-- small box -->
             <div class="small-box bg-info f-black">
               <div class="inner ">
-                <h3>0</h3>
+                <h3 id="allProject">0</h3>
                 <p>โครงการทั้งหมด</p>
               </div>
               <div class="icon">
@@ -147,7 +147,7 @@
             <!-- small box -->
             <div class="small-box bg-success f-black">
               <div class="inner">
-                <h3>0</h3>
+                <h3 id="approveProject">0</h3>
                 <p>โครงการที่ผ่านการอนุมัติ</p>
               </div>
               <div class="icon">
@@ -161,7 +161,7 @@
             <!-- small box -->
             <div class="small-box bg-warningM f-black">
               <div class="inner">
-                <h3>0</h3>
+                <h3 id="pendingApproveProject">0</h3>
                 <p>โครงการที่รอการอนุมัติ</p>
               </div>
               <div class="icon">
@@ -175,7 +175,7 @@
             <!-- small box -->
             <div class="small-box bg-danger f-black">
               <div class="inner">
-                <h3>0</h3>
+                <h3 id="disApproveProject">0</h3>
                 <p>โครงการที่ไม่ผ่านการอนุมัติ</p>
               </div>
               <div class="icon">
@@ -308,15 +308,50 @@
 </html>
 <script>
 $(document).ready(function(){
+  // allProject
   $.ajax({
       type: 'post', 
       dataType: "json",
       url: 'dist/ajax.php',
       data: {getCountProject: true},
       success: function (data) {
-        console.log(data)
+        $("#allProject").html(data.countProject)
       },
   })
+  //End allProject
+  // approveProject
+  $.ajax({
+      type: 'post', 
+      dataType: "json",
+      url: 'dist/ajax.php',
+      data: {getCountProject: true, status: "ผ่านการอนุมัติ"},
+      success: function (data) {
+        $("#approveProject").html(data.countProject)
+      },
+  })
+  //End approveProject
+  // pendingApproveProject
+  $.ajax({
+      type: 'post', 
+      dataType: "json",
+      url: 'dist/ajax.php',
+      data: {getCountProject: true, status: "รอการอนุมัติ"},
+      success: function (data) {
+        $("#pendingApproveProject").html(data.countProject)
+      },
+  })
+  //End pendingApproveProject  
+  // disApproveProject
+  $.ajax({
+      type: 'post', 
+      dataType: "json",
+      url: 'dist/ajax.php',
+      data: {getCountProject: true, status: "ไม่ผ่านการอนุมัติ"},
+      success: function (data) {
+        $("#disApproveProject").html(data.countProject)
+      },
+  })
+  //End disApproveProject
 })
 $(function () { 
   var areaChartData = {

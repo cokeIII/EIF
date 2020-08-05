@@ -66,6 +66,7 @@ if(isset($_POST['formProjectEdit'])){
     $locations = $_POST['locations'];
     $start_duration = $_POST['start_duration'];
     $end_duration = $_POST['end_duration'];
+    $status = $_POST['status'];
     $persons = json_encode($persons,JSON_UNESCAPED_UNICODE);
     $budget = json_encode($budget,JSON_UNESCAPED_UNICODE);
 
@@ -80,7 +81,8 @@ if(isset($_POST['formProjectEdit'])){
     locations = '$locations',
     product = '$product',
     indicator = '$indicator',
-    budget = '$budget'
+    budget = '$budget',
+    pro_status = '$status'
     where project_id = '$project_id'
     ";
     if ($conn->query($sql) === TRUE) {

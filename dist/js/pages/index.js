@@ -46,11 +46,24 @@ $(document).ready(function(){
     $(document).on('click','#eecProAll',function(){
         $('#mainContent').load("pages/about/eecProAll.php")
     })
+    function rePreproject(){
+        $.ajax({
+            type: 'post', 
+            dataType: "json",
+            url: 'pages/project/preProject.php',
+            data: {},
+            success: function (data) {
+                $('#mainContent').html(data)
+                $("#tablePrePro").dataTable()      
+            },
+        })
+
+    }
     $(document).on('click','#preProject',function(){
-        $('#mainContent').load("pages/project/preProject.php")
+        rePreproject()
     })
     $(document).on('click','#preProjectAd',function(){
-        $('#mainContent').load("pages/project/preProject.php")
+        rePreproject()
     })
     $(document).on('click','#reportQua',function(){
         $.ajax({
@@ -100,6 +113,130 @@ $(document).ready(function(){
             },
         })
     })
+    /// disApprove
+    $(document).on("click",".disApprove",function(){
+        let item = $(this)
+        $.ajax({
+            type: 'post', 
+            dataType: "json",
+            url: 'dist/ajax.php',
+            data: {disApprove:true, projectId: $(this).attr("val")},
+            success: function (data) {
+                if(data){
+                    item.hide()
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'ไม่อนุมัติสำเร็จ',
+                        text: '',
+                        footer: ''   
+                    })
+                    rePreproject()
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'ไม่อนุมัติ ไม่สำเร็จ',
+                        text: '',
+                        footer: ''   
+                    })
+                }        
+            },
+        })
+    })
+    /// End approve
+    /// approve
+    $(document).on("click",".viewProject",function(){
+        $.ajax({
+            type: 'post', 
+            dataType: "json",
+            url: 'pages/project/viewProject.php',
+            data: {
+                viewProject:true, 
+                projectId: $(this).attr("val"),
+            },
+            success: function (data) {
+                $('#mainContent').html(data.content)         
+                var date = new Date()
+                var d    = date.getDate(),
+                    m    = date.getMonth(),
+                    y    = date.getFullYear()
+
+                var Calendar = FullCalendar.Calendar;
+                
+                var calendarEl = document.getElementById('calendar');
+                let i = 0,dateData=[];
+                $.each(data.calendar,function(index,value){
+                    let newDate = value.split('-')
+
+                    if(index == "start_duration"){
+                        $("#dateDetail").append('<p>วันเริ่มโครงการ : '+newDate[2]+"/"+newDate[1]+"/"+newDate[0]+"</p>")
+                        dateData[i]={
+                            title          : 'วันเริ่มโครงการ',
+                            start          : new Date(newDate[0], newDate[1]-1,newDate[2]),
+                            allDay         : false,
+                            backgroundColor: '#0073b7', //Blue
+                            borderColor    : '#0073b7' //Blue
+                        }
+                    } else if(index == "end_duration") {
+                        $("#dateDetail").append('<p>วันสิ้นสุดโครงการ : '+newDate[2]+"/"+newDate[1]+"/"+newDate[0]+"</p>")
+                        dateData[i]={
+                            title          : 'วันสิ้นสุดโครงการ',
+                            start          : new Date(newDate[0], newDate[1]-1,newDate[2]),
+                            allDay         : false,
+                            backgroundColor: '#0073b7', //Blue
+                            borderColor    : '#0073b7' //Blue
+                        }
+                    }
+                    i++
+                })
+                
+                var calendar = new Calendar(calendarEl, {
+                    plugins: [ 'bootstrap', 'interaction', 'dayGrid', 'timeGrid' ],
+                    header    : {
+                        left  : 'prev,next today',
+                        center: 'title',
+                        right : ''
+                    },
+                    'themeSystem': 'bootstrap',
+                    //Random default events
+                    events    : dateData,
+                });
+
+                calendar.render();
+
+            },
+        })
+
+    })
+    $(document).on("click",".approve",function(){
+        let item = $(this)
+        $.ajax({
+            type: 'post', 
+            dataType: "json",
+            url: 'dist/ajax.php',
+            data: {approve:true, projectId: $(this).attr("val")},
+            success: function (data) {
+                if(data){
+                    item.hide()
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'อนุมัติสำเร็จ',
+                        text: '',
+                        footer: ''   
+                    })
+                    rePreproject()
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'อนุมัติไม่สำเร็จ',
+                        text: '',
+                        footer: ''   
+                    })
+                }        
+            },
+        })
+    })
+
+    /// End approve
     /// del Qua User
     $(document).on('click','.del-qua-user',function(){
 
@@ -364,7 +501,8 @@ $(document).ready(function(){
                 budget: budget,
                 product: $("#editProduct").val(),
                 indicator: $("#editIndicator").val(),
-                locations: $("#editLocation").val()
+                locations: $("#editLocation").val(),
+                status: $("#proStatus").val()
             },
             success: function (data) {
                 if(data == true){

@@ -1,5 +1,6 @@
 <?php require_once "../conf.php";
 require_once "../connect.php";
+require_once "../../dist/util.php";
 $jsonData ="";
 $project_id = $_POST["project_id"];
 $sql = "select * from project where project_id = '$project_id'";
@@ -159,6 +160,18 @@ $jsonData.='<div class="content-header">
                             </div>
                         </div>
                         <hr class="hr">
+                        <div class="form-group">
+                            <label for="editIndicator" class="col-md-5 control-label h5">12. สถานะ</label>
+                            <div class="input-group col-md-5">
+                                <select name="proStatus" id="proStatus" class="form-control">
+                                    <option value="รอการอนุมัติ">รอการอนุมัติ</option>
+                                    <option value="ผ่านการอนุมัติ">ผ่านการอนุมัติ</option>
+                                    <option value="ไม่ผ่านการอนุมัติ">ไม่ผ่านการอนุมัติ</option>
+                                    <option value="ขั้นดำเนินกิจกรรม">ขั้นดำเนินกิจกรรม</option>
+                                    <option value="ดำเนินงานแล้วเสร็จ">ดำเนินงานแล้วเสร็จ</option>
+                                </select>
+                            </div>
+                        </div>
                         <button type="submit" class="btn btn-primary mb-5">แก้ไขโครงการ</button>
                     </div>
                 </form>                                
