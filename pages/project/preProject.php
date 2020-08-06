@@ -98,7 +98,7 @@ $jsonData.='<div class="content-header">
                                                 รายละเอียด
                                             </a>';
                                             if(isset($_SESSION["status"]) && $_SESSION["status"] == "admin"){
-                                                if($row["pro_status"] == "รอการอนุมัติ"){
+                                                if($row["pro_status"] == "รอการอนุมัติ") {
                                                 $jsonData.='
                                                 <a class="ml-3 btn btn-success btn-sm approve" href="#"  val="'.$row["project_id"].'">
                                                     <i class="fas fa-check">
@@ -111,7 +111,7 @@ $jsonData.='<div class="content-header">
                                                     ไม่อนุมัติ
                                                 </a>';
                                             
-                                                } else if($row["pro_status"] == "ไม่ผ่านการอนุมัติ"){
+                                                } else if($row["pro_status"] == "ไม่ผ่านการอนุมัติ") {
                                                     $jsonData.='<a class="ml-3 btn btn-success btn-sm approve" href="#"  val="'.$row["project_id"].'">
                                                         <i class="fas fa-check">
                                                         </i>

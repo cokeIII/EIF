@@ -27,6 +27,7 @@
   <link rel="stylesheet" href="dist/css/adminlte.min.css">
   <!-- Theme style index-->
   <link rel="stylesheet" href="dist/css/index.css">
+  <link rel="stylesheet" href="dist/css/jquery.autocomplete.css">
   <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
   <!-- overlayScrollbars -->
   <link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
@@ -217,10 +218,10 @@
                 <!-- <i class="fas fa-th mr-1"></i> -->
                 <div class="row">
                   <div class="input-group input-group-sm f-black">
-                    ผลการประเมินโครงการ
-                    <input type="text" class="form-control ml-2" placeholder="ชื่อโครงการ">
+                    ความคืบหน้าโครงการ
+                    <input type="text" class="form-control ml-2" placeholder="ชื่อโครงการ" id="nameProProgress">
                     <span class="input-group-append">
-                      <button type="button" class="btn color-sidebar f-withe btn-flat">Go!</button>
+                      <button type="button" class="btn color-sidebar f-withe btn-flat" id="submitNamePro">Go!</button>
                     </span>
                   </div>
                 </div>
@@ -304,10 +305,24 @@
 <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
 <script src="dist/js/adminlte.js"></script>
 <script src="dist/js/pages/index.js"></script>
+<script src="dist/js/jquery.autocomplete.js"></script>
 </body>
 </html>
 <script>
 $(document).ready(function(){
+  $.ajax({
+      type: 'post', 
+      dataType: "json",
+      url: 'dist/ajax.php',
+      data: {getAllNameProject: true},
+      success: function (data) {
+        console.log(data)
+        $("#nameProProgress").autocomplete({
+            source: [data]
+        });
+      },
+  })
+
   // allProject
   $.ajax({
       type: 'post', 
@@ -354,110 +369,164 @@ $(document).ready(function(){
   //End disApproveProject
 })
 $(function () { 
-  var areaChartData = {
-      labels  : ['ยานยนต์สมัยใหม่', 'อิเล็กทรอนิกส์อัจฉริยะ', 'การท่องเที่ยว', 'การเกษตร', 'การแปรรูปอาหาร', 'หุ่นยนต์', 'โลจิสติกส์','ดิจิทัล','เชื้อเพลิงชีวภาพ','การแพทย์ครบวงจร'],
-      datasets: [
-        {
-          label               : 'จำนวนโครงการ',
-          backgroundColor     : 'rgba(60,141,188,0.9)',
-          borderColor         : 'rgba(60,141,188,0.8)',
-          pointRadius          : false,
-          pointColor          : '#3b8bba',
-          pointStrokeColor    : 'rgba(60,141,188,1)',
-          pointHighlightFill  : '#fff',
-          pointHighlightStroke: 'rgba(60,141,188,1)',
-          data                : [28, 34, 31, 19, 36, 27, 30,42,11,17]
+  var dataGroupProject = []
+  for(let i = 0;i<10;i++){
+    dataGroupProject[i] = 0
+  }
+    //group project
+    $.ajax({
+      type: 'post', 
+      dataType: "json",
+      url: 'dist/ajax.php',
+      data: {getCountGroupProject: true},
+      success: function (data) {
+        $.each(data, function( index, value ) {
+          if(parseInt(value.countProject) && index!="status") {
+            dataGroupProject[value.gId-1] = parseInt(value.countProject);
+          }
+        });
+        var areaChartData = {
+            labels  : ['ยานยนต์สมัยใหม่', 'อิเล็กทรอนิกส์อัจฉริยะ', 'การท่องเที่ยว', 'การเกษตร', 'การแปรรูปอาหาร', 'หุ่นยนต์', 'โลจิสติกส์','ดิจิทัล','เชื้อเพลิงชีวภาพ','การแพทย์ครบวงจร'],
+            datasets: [
+              {
+                label               : 'จำนวนโครงการ',
+                backgroundColor     : 'rgba(60,141,188,0.9)',
+                borderColor         : 'rgba(60,141,188,0.8)',
+                pointRadius          : false,
+                pointColor          : '#3b8bba',
+                pointStrokeColor    : 'rgba(60,141,188,1)',
+                pointHighlightFill  : '#fff',
+                pointHighlightStroke: 'rgba(60,141,188,1)',
+                data                : dataGroupProject
+              }
+            ]
+          }
+      
+
+        //-------------
+        //- BAR CHART -
+        //-------------
+        var barChartCanvas = $('#barChart').get(0).getContext('2d')
+        var barChartData = jQuery.extend(true, {}, areaChartData)
+        var temp0 = areaChartData.datasets[0]
+        // var temp1 = areaChartData.datasets[1]
+        // barChartData.datasets[0] = temp1
+        barChartData.datasets[0] = temp0
+
+        var barChartOptions = {
+          responsive              : true,
+          maintainAspectRatio     : false,
+          datasetFill             : true,
+          legend: {
+            display: false
+          },
         }
-      ]
-    }
 
-    //-------------
-    //- BAR CHART -
-    //-------------
-    var barChartCanvas = $('#barChart').get(0).getContext('2d')
-    var barChartData = jQuery.extend(true, {}, areaChartData)
-    var temp0 = areaChartData.datasets[0]
-    // var temp1 = areaChartData.datasets[1]
-    // barChartData.datasets[0] = temp1
-    barChartData.datasets[0] = temp0
-
-    var barChartOptions = {
-      responsive              : true,
-      maintainAspectRatio     : false,
-      datasetFill             : true,
-      legend: {
-        display: false
+        var barChart = new Chart(barChartCanvas, {
+          type: 'bar', 
+          data: barChartData,
+          options: barChartOptions
+        })
+         
       },
-    }
-
-    var barChart = new Chart(barChartCanvas, {
-      type: 'bar', 
-      data: barChartData,
-      options: barChartOptions
     })
-})
+  })
+  //End group project
+
+  
 // // Sales graph chart
 let colorline = "#273c49"
 var salesGraphChartCanvas = $('#line-chart').get(0).getContext('2d');
-//$('#revenue-chart').get(0).getContext('2d');
+function getMaxProgress(name){
+    $.ajax({
+      type: 'post', 
+      dataType: "json",
+      url: 'dist/ajax.php',
+      data: {getProgress: true, project_name : name},
+      success: function (data) {
+        console.log(data)
 
-var salesGraphChartData = {
-  labels  : ['2011 Q1', '2011 Q2', '2011 Q3', '2011 Q4', '2012 Q1', '2012 Q2', '2012 Q3', '2012 Q4', '2013 Q1', '2013 Q2'],
-  datasets: [
-    {
-      label               : '',
-      fill                : false,
-      borderWidth         : 2,
-      lineTension         : 0,
-      spanGaps : true,
-      borderColor         : colorline,
-      pointRadius         : 3,
-      pointHoverRadius    : 7,
-      pointColor          : colorline,
-      pointBackgroundColor: colorline,
-      data                : [30, 60, 20, 70, 80, 50, 40, 30, 40, 50]
-    }
-  ]
-}
+        let labelData = []
+        let dataProgress = []
+        $.each(data, function( index, value ) {
+          labelData[index] = value.quater_year+"Q"+value.quater 
+          dataProgress[index] = value.progress
+        })
+        var salesGraphChartData = {
+          labels  : labelData.reverse(),
+          datasets: [
+            {
+              label               : '',
+              fill                : false,
+              borderWidth         : 2,
+              lineTension         : 0,
+              spanGaps : true,
+              borderColor         : colorline,
+              pointRadius         : 3,
+              pointHoverRadius    : 7,
+              pointColor          : colorline,
+              pointBackgroundColor: colorline,
+              data                : dataProgress.reverse()
+            }
+          ]
+        }
 
-var salesGraphChartOptions = {
-  maintainAspectRatio : false,
-  responsive : true,
-  legend: {
-    display: false,
-  },
-  scales: {
-    xAxes: [{
-      ticks : {
-        fontColor: colorline,
+        var salesGraphChartOptions = {
+          maintainAspectRatio : false,
+          responsive : true,
+          legend: {
+            display: false,
+          },
+          scales: {
+            xAxes: [{
+              ticks : {
+                fontColor: colorline,
+              },
+              gridLines : {
+                display : false,
+                color: colorline,
+                drawBorder: false,
+              }
+            }],
+            yAxes: [{
+              ticks : {
+                stepSize: 10,
+                fontColor: colorline,
+              },
+              gridLines : {
+                display : true,
+                color: colorline,
+                drawBorder: false,
+              }
+            }]
+          }
+        }
+
+        // This will get the first returned node in the jQuery collection.
+        var salesGraphChart = new Chart(salesGraphChartCanvas, { 
+            type: 'line', 
+            data: salesGraphChartData, 
+            options: salesGraphChartOptions
+          }
+        )
+
       },
-      gridLines : {
-        display : false,
-        color: colorline,
-        drawBorder: false,
-      }
-    }],
-    yAxes: [{
-      ticks : {
-        stepSize: 10,
-        fontColor: colorline,
-      },
-      gridLines : {
-        display : true,
-        color: colorline,
-        drawBorder: false,
-      }
-    }]
-  }
+    })
 }
-
-// This will get the first returned node in the jQuery collection.
-var salesGraphChart = new Chart(salesGraphChartCanvas, { 
-    type: 'line', 
-    data: salesGraphChartData, 
-    options: salesGraphChartOptions
-  }
-)
+$.ajax({
+    type: 'post', 
+    dataType: "json",
+    url: 'dist/ajax.php',
+    data: {getProgressMost: true},
+    success: function (data) {
+      $("#nameProProgress").val(data.projectName)
+      getMaxProgress(data.projectName)
+    },
+})
+$(document).on('click','#submitNamePro',function(){
+    getMaxProgress($(this).val())
+})
+    
 </script>
 <?php
   if(isset($_SESSION["login_fail"]) && $_SESSION["login_fail"]==true){ 

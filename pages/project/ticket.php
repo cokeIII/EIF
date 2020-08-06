@@ -85,7 +85,7 @@ $jsonData.=
                                                 รายงานปัญหา
                                             </a>';
                                         }
-                                        $jsonData.='<a class="btn btn-primary btn-sm  mt-3 all-ticket" href="#"  proName="'.$row["project_name"].'" proId="'.$row["project_id"].'">
+                                        $jsonData.='<a class="btn btn-primary btn-sm  mt-3 ml-1 all-ticket" href="#"  proName="'.$row["project_name"].'" proId="'.$row["project_id"].'">
                                             <i class="fas fa-folder">
                                             </i>
                                             ปัญหาที่รายงานทั้งหมด

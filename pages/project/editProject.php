@@ -163,11 +163,13 @@ $jsonData.='<div class="content-header">
                         <div class="form-group">
                             <label for="editIndicator" class="col-md-5 control-label h5">12. สถานะ</label>
                             <div class="input-group col-md-5">
-                                <select name="proStatus" id="proStatus" class="form-control">
-                                    <option value="รอการอนุมัติ">รอการอนุมัติ</option>
+                                <select name="proStatus" id="proStatus" class="form-control">';
+                                if($_SESSION["status"] == "admin"){
+                                $jsonData.='<option value="รอการอนุมัติ">รอการอนุมัติ</option>
                                     <option value="ผ่านการอนุมัติ">ผ่านการอนุมัติ</option>
-                                    <option value="ไม่ผ่านการอนุมัติ">ไม่ผ่านการอนุมัติ</option>
-                                    <option value="ขั้นดำเนินกิจกรรม">ขั้นดำเนินกิจกรรม</option>
+                                    <option value="ไม่ผ่านการอนุมัติ">ไม่ผ่านการอนุมัติ</option>';
+                                }
+                                $jsonData.='<option value="ขั้นดำเนินกิจกรรม">ขั้นดำเนินกิจกรรม</option>
                                     <option value="ดำเนินงานแล้วเสร็จ">ดำเนินงานแล้วเสร็จ</option>
                                 </select>
                             </div>
