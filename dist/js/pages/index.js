@@ -65,6 +65,7 @@ $(document).ready(function(){
     $(document).on('click','#preProjectAd',function(){
         rePreproject()
     })
+
     $(document).on('click','#reportQua',function(){
         $.ajax({
             type: 'post', 
@@ -86,6 +87,18 @@ $(document).ready(function(){
             success: function (data) {
                 $('#mainContent').html(data)
                 $("#tableTicket").dataTable()         
+            },
+        })
+    })
+    $(document).on('click','#listBusi',function(){
+        $.ajax({
+            type: 'post', 
+            dataType: "json",
+            url: 'pages/business/listBusiness.php',
+            data: {},
+            success: function (data) {
+                $('#mainContent').html(data)
+                $("#allBusiness").dataTable()         
             },
         })
     })
@@ -113,6 +126,50 @@ $(document).ready(function(){
             },
         })
     })
+    /// Edit business
+    $(document).on('click','.btn-editBusi',function(){
+        $.ajax({
+            type: 'post', 
+            dataType: "json",
+            url: 'pages/business/formBusiness.php',
+            data: {id:$(this).attr("val")},
+            success: function (data) {
+                $('#mainContent').html(data)     
+            },
+        })
+    })
+    $(document).on('submit','#formEditBusi',function(e){
+        e.preventDefault()
+        $.ajax({
+            type: 'post', 
+            dataType: "json",
+            url: 'pages/business/dbBusiness.php',
+            data: new FormData(this),
+            contentType: false,
+            cache: false,
+            processData:false,
+
+            success: function (data) {
+                if(data == true){
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'แก้ไขสำเร็จ',
+                        text: '',
+                        footer: ''   
+                    })
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'แก้ไขไม่สำเร็จ',
+                        text: '',
+                        footer: ''   
+                    })
+                }        
+    
+            },
+        })
+    })
+    /// End Edit business
     /// disApprove
     $(document).on("click",".disApprove",function(){
         let item = $(this)

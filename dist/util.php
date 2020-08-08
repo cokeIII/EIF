@@ -14,8 +14,21 @@
     }
 
     function genOption($opt){
+        $res = "";
         foreach ($opt as $key => $value) {
-            echo '<option value="'.$value.'">'.$value.'</option>';
+            $res.='<option value="'.$value.'">'.$value.'</option>';
         }
+        return $res;
+    }
+    function genOptionSe($opt,$selected){
+        $res = "";
+        foreach ($opt as $key => $value) {
+            $res.='<option value="'.$value.'" ';
+                if($value == $selected){
+                    $res.='selected'; 
+                }
+            $res.='>'.$value.'</option>';
+        }
+        return $res;
     }
 ?>

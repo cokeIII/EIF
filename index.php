@@ -140,7 +140,7 @@
               <div class="icon">
                 <i class="icon ion-md-business"></i>
               </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a id="infoAllproject" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -154,7 +154,7 @@
               <div class="icon">
                 <i class="icon ion-md-checkmark"></i>
               </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a id="infoApprproject" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -168,7 +168,7 @@
               <div class="icon">
                 <i class="icon ion-md-stopwatch"></i>
               </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a id="infoWaitproject" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -182,7 +182,7 @@
               <div class="icon">
                 <i class="icon ion-md-close"></i>
               </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a id="infoDisproject" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -524,9 +524,56 @@ $.ajax({
     },
 })
 $(document).on('click','#submitNamePro',function(){
-    getMaxProgress($(this).val())
+    getMaxProgress($("#nameProProgress").val())
 })
-    
+$(document).on('click','#infoAllproject',function(){
+    $.ajax({
+        type: 'post', 
+        dataType: "json",
+        url: 'pages/about/allProject.php',
+        data: {},
+        success: function (data) {
+            $('#mainContent').html(data)
+            $("#infoAllTablePrePro").dataTable()        
+        },
+    })
+})   
+$(document).on('click','#infoWaitproject',function(){
+    $.ajax({
+        type: 'post', 
+        dataType: "json",
+        url: 'pages/about/allProject.php',
+        data: {status:'รอการอนุมัติ'},
+        success: function (data) {
+            $('#mainContent').html(data)
+            $("#allBusiness").dataTable()        
+        },
+    })
+})   
+$(document).on('click','#infoApprproject',function(){
+    $.ajax({
+        type: 'post', 
+        dataType: "json",
+        url: 'pages/about/allProject.php',
+        data: {status:'ผ่านการอนุมัติ'},
+        success: function (data) {
+            $('#mainContent').html(data)
+            $("#infoAllTablePrePro").dataTable()        
+        },
+    })
+})   
+$(document).on('click','#infoDisproject',function(){
+    $.ajax({
+        type: 'post', 
+        dataType: "json",
+        url: 'pages/about/allProject.php',
+        data: {status:'ไม่ผ่านการอนุมัติ'},
+        success: function (data) {
+            $('#mainContent').html(data)
+            $("#infoAllTablePrePro").dataTable()        
+        },
+    })
+})   
 </script>
 <?php
   if(isset($_SESSION["login_fail"]) && $_SESSION["login_fail"]==true){ 

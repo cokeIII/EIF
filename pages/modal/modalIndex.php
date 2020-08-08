@@ -124,7 +124,7 @@
                         <label for="business_size" class="col-md-3 control-label">ขนาดสถานประกอบการ</label>
                         <div class="input-group col-md-2">
                             <select class="form-control" id="business_size" name="business_size">
-                                <?php genOption($business_opt)?>
+                                <?php echo genOption($business_opt)?>
                             </select>
                         </div>
                     </div>    
@@ -150,7 +150,7 @@
                         <div class="input-group col-md-4">
                             <select class="form-control" id="group_eec" name="group_eec" required>
                                 <option id="groupEEC_id_list" disabled selected  value=""> -- กรุณาเลือกกลุ่ม -- </option>
-                                <?php genGroupEEC($conn); ?>
+                                <?php echo genGroupEEC($conn); ?>
                             </select>
                             <div class="input-group-addon">
                                 <i class="fa fa-asterisk ml-3" style="color:red;" aria-hidden="true"> บังคับ</i>
@@ -165,7 +165,7 @@
                         <div class="input-group col-md-2">
                             <select class="form-control select2" id="province_id" name="province_id">
                             <option id="province_id_list" disabled selected  value=""> -- กรุณาเลือกจังหวัด -- </option>
-                                <?php genProvinces($conn); ?>
+                                <?php echo genProvinces($conn); ?>
                             </select>
                         </div>
                     </div>
@@ -174,7 +174,7 @@
                         <div class="input-group col-md-2">
                             <select class="form-control select2" id="district_id" name="district_id">
                                 <option id="district_id_list" disabled selected  value=""> -- กรุณาเลือกอำเภอ/เขต -- </option>
-                                <?php genAmphures($conn)?>
+                                <?php echo genAmphures($conn)?>
                             </select>
                         </div>
                     </div>
@@ -183,7 +183,7 @@
                         <div class="input-group col-md-2">
                             <select class="form-control select2" id="subdistrict_id" name="subdistrict_id">
                                 <option id="subdistrict_id_list" disabled selected  value=""> -- กรุณาเลือกตำบล -- </option>
-                                <?php genDistricts($conn)?>
+                                <?php echo genDistricts($conn)?>
                             </select>
                         </div>
                     </div>
@@ -270,7 +270,7 @@
                         <label for="tax_break" class="col-md-2 control-label">การลดหย่อนภาษี</label>
                         <div class="input-group col-md-2">
                             <select class="form-control" id="tax_break"name="tax_break">
-                            <?php genOption($tax_break_opt)?>
+                            <?php echo genOption($tax_break_opt)?>
                             </select>
                         </div>
                     </div> 
