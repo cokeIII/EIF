@@ -126,6 +126,19 @@ $(document).ready(function(){
             },
         })
     })
+    /// Edit Profile
+    $(document).on('click','.edit-profile',function(){
+        $.ajax({
+            type: 'post', 
+            dataType: "json",
+            url: 'pages/business/formBusiness.php',
+            data: {id:$(this).attr("valProfile")},
+            success: function (data) {
+                $('#mainContent').html(data)     
+            },
+        })
+    })
+    /// End Edit Profile
     /// Edit business
     $(document).on('click','.btn-editBusi',function(){
         $.ajax({
@@ -170,6 +183,76 @@ $(document).ready(function(){
         })
     })
     /// End Edit business
+    /// Del business
+    $(document).on('click','.btn-delBusi',function(){
+
+        let id = $(this).attr("val")
+
+        const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+            confirmButton: 'btn btn-success ml-2',
+            cancelButton: 'btn btn-danger'
+        },
+        buttonsStyling: false
+        })
+
+        swalWithBootstrapButtons.fire({
+        title: 'ต้องการลบ ใช่ หรือ ไม่ ?',
+        text: "",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'ลบ',
+        cancelButtonText: 'ยกเลิก',
+        reverseButtons: true
+        }).then((result) => {
+        if (result.value) {
+            $.ajax({
+                type: 'post', 
+                dataType: "json",
+                url: 'pages/business/dbBusiness.php',
+                data: {delBusi: true, bus_id: id},
+                success: function (data) {
+                    if(data == true){
+                        swalWithBootstrapButtons.fire(
+                        'ลบสำเร็จ',
+                        '',
+                        'success'
+                        )
+                        $.ajax({
+                            type: 'post', 
+                            dataType: "json",
+                            url: 'pages/business/listBusiness.php',
+                            data: {},
+                            success: function (data) {
+                                $('#mainContent').html(data)
+                                $("#allBusiness").dataTable()         
+                            },
+                        })                
+                    } else {
+                        swalWithBootstrapButtons.fire(
+                        'ลบไม่สำเร็จ',
+                        '',
+                        'error'
+                        )
+
+                    }    
+                },
+            })
+
+        } else if (
+            /* Read more about handling dismissals below */
+            result.dismiss === Swal.DismissReason.cancel
+        ) {
+            swalWithBootstrapButtons.fire(
+            'ยกเลิก',
+            '',
+            'error'
+            )
+        }
+        })
+
+    })
+    /// End Del business
     /// disApprove
     $(document).on("click",".disApprove",function(){
         let item = $(this)

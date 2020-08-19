@@ -59,15 +59,18 @@
     <ul class="navbar-nav ml-auto">
       <li class="nav-item">
         <?php if(isset($_SESSION["username"])){
-            echo $_SESSION["username"];
+            echo '<div class="nav-link">'.$_SESSION["username"].'</div>';
         };?>
       </li>
       <li class="nav-item">
         <?php if(isset($_SESSION["branch_no"])){
-            echo '<div class="ml-1">สาขา '.$_SESSION["branch_no"].'</div>';
+            echo '<div class="ml-1 nav-link">สาขา '.$_SESSION["branch_no"].'</div>';
         };?>
       </li>
-      <li class="nav-item">
+      <li class="nav-item ">
+        <a class="nav-link edit-profile" valProfile="<?php echo $_SESSION["id"];?>"><i class="fas fa-cog"></i></a>
+      </li>
+      <li class="nav-item ">
         <?php if(isset($_SESSION["login"]) && $_SESSION["login"]==true){?>
           <a class="nav-link" href="pages/login/logout.php">ออกจากระบบ</a>
         <?php } else {?>

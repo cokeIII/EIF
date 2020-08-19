@@ -54,5 +54,16 @@
         }
 
     }
+    
+    if(isset($_POST["delBusi"])){
+        $id = $_POST["bus_id"];
+        $sql = "delete from business where id = '$id'";
+
+        if ($conn->query($sql) === TRUE) {
+            echo json_encode(true);
+        } else {
+            echo json_encode(false);
+        }
+    }
 
 ?>
