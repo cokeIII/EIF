@@ -36,6 +36,16 @@
                 <div class="card-body">
                   <!-- the events -->
                   <div id="external-events">
+                  ';
+                  $project_id = $_POST["project_id"];
+                  $sql  = "select * from schedule where project_id = '$project_id' and date = '0000-00-00'";
+                  $result = $conn->query($sql);
+                  if ($result->num_rows > 0) {
+                      while($row = $result->fetch_assoc()) {
+                        $jsonData .='<div class="external-event bg-warning">'.$row['detail'].'</div>';
+                      }   
+                  }
+                  $jsonData .='
                     <!-- <div class="external-event bg-success">Lunch</div>
                     <div class="external-event bg-warning">Go home</div>
                     <div class="external-event bg-info">Do homework</div>

@@ -126,16 +126,32 @@ $(document).ready(function(){
             },
         })
     })
-
     $(document).on('click','#manage-schedule',function(){
         $.ajax({
             type: 'post', 
             dataType: "json",
-            url: 'pages/schedule/schedule.php',
+            url: 'pages/schedule/listProSch.php',
             data: {},
             success: function (data) {
                 $('#mainContent').html(data)
-                  
+                $("#tableSchedule").dataTable()        
+            },
+        })
+    })
+    //schedule
+    let projectId_sch = ''
+    $(document).on('click','.btn-schedule',function(){
+        projectId_sch = $(this).attr('proId')
+        $.ajax({
+            type: 'post', 
+            dataType: "json",
+            url: 'pages/schedule/schedule.php',
+            data: {
+                project_id: projectId_sch,
+            },
+            success: function (data) {
+                $('#mainContent').html(data)
+                
                     /* initialize the external events
                 -----------------------------------------------------------------*/
                 function ini_events(ele) {
@@ -294,17 +310,29 @@ $(document).ready(function(){
                     }).addClass('external-event')
                     event.html(val)
                     $('#external-events').prepend(event)
-            
+
                     //Add draggable funtionality
                     ini_events(event)
-            
+                    $.ajax({
+                        type: 'post', 
+                        dataType: "json",
+                        url: 'pages/schedule/dbSchedule.php',
+                        data: {
+                            insertSch: true,
+                            project_id: projectId_sch,
+                            detail: val,
+                        },
+                        success: function (data) {  
+                            console.log(data)     
+                        },
+                    })
                     //Remove event from text input
                     $('#new-event').val('')
                 })  
             },
         })
     })
-
+    //schedule end
     /// Edit Profile
     $(document).on('click','.edit-profile',function(){
         $.ajax({
