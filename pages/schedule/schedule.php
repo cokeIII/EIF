@@ -42,21 +42,10 @@
                   $result = $conn->query($sql);
                   if ($result->num_rows > 0) {
                       while($row = $result->fetch_assoc()) {
-                        $jsonData .='<div class="external-event bg-warning">'.$row['detail'].'</div>';
+                        $jsonData .='<div class="external-event bg-info">'.$row['detail'].'<a class="float-right btn-delSch" href="#" val="'.$row['sch_id'].'"><i class="fas fa-minus-square "></i></a></div>';
                       }   
                   }
                   $jsonData .='
-                    <!-- <div class="external-event bg-success">Lunch</div>
-                    <div class="external-event bg-warning">Go home</div>
-                    <div class="external-event bg-info">Do homework</div>
-                    <div class="external-event bg-primary">Work on UI design</div>
-                    <div class="external-event bg-danger">Sleep tight</div> -->
-                    <div class="checkbox">
-                      <label for="drop-remove">
-                        <input type="checkbox" id="drop-remove">
-                        remove after drop
-                      </label>
-                    </div>
                   </div>
                 </div>
                 <!-- /.card-body -->
@@ -69,13 +58,6 @@
                 <div class="card-body">
                   <div class="btn-group" style="width: 100%; margin-bottom: 10px;">
                     <!--<button type="button" id="color-chooser-btn" class="btn btn-info btn-block dropdown-toggle" data-toggle="dropdown">Color <span class="caret"></span></button>-->
-                    <ul class="fc-color-picker" id="color-chooser">
-                      <li><a class="text-primary" href="#"><i class="fas fa-square"></i></a></li>
-                      <li><a class="text-warning" href="#"><i class="fas fa-square"></i></a></li>
-                      <li><a class="text-success" href="#"><i class="fas fa-square"></i></a></li>
-                      <li><a class="text-danger" href="#"><i class="fas fa-square"></i></a></li>
-                      <li><a class="text-muted" href="#"><i class="fas fa-square"></i></a></li>
-                    </ul>
                   </div>
                   <!-- /btn-group -->
                   <div class="input-group">

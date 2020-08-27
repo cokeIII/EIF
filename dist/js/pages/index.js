@@ -138,10 +138,71 @@ $(document).ready(function(){
             },
         })
     })
-    //schedule
     let projectId_sch = ''
-    $(document).on('click','.btn-schedule',function(){
-        projectId_sch = $(this).attr('proId')
+    ///del schedule
+    $(document).on('click','.btn-delSch',function(){
+
+        let id = $(this).attr("val")
+
+        const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+            confirmButton: 'btn btn-success ml-2',
+            cancelButton: 'btn btn-danger'
+        },
+        buttonsStyling: false
+        })
+
+        swalWithBootstrapButtons.fire({
+        title: 'ต้องการลบ ใช่ หรือ ไม่ ?',
+        text: "",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'ลบ',
+        cancelButtonText: 'ยกเลิก',
+        reverseButtons: true
+        }).then((result) => {
+        if (result.value) {
+            $.ajax({
+                type: 'post', 
+                dataType: "json",
+                url: 'pages/schedule/dbSchedule.php',
+                data: {delSch: true, sch_id: id},
+                success: function (data) {
+                    if(data == true){
+                        swalWithBootstrapButtons.fire(
+                        'ลบสำเร็จ',
+                        '',
+                        'success'
+                        )
+                        reSch(projectId_sch)               
+                    } else {
+                        swalWithBootstrapButtons.fire(
+                        'ลบไม่สำเร็จ',
+                        '',
+                        'error'
+                        )
+
+                    }    
+                },
+            })
+
+        } else if (
+            /* Read more about handling dismissals below */
+            result.dismiss === Swal.DismissReason.cancel
+        ) {
+            swalWithBootstrapButtons.fire(
+            'ยกเลิก',
+            '',
+            'error'
+            )
+        }
+        })
+
+    })
+
+    /// end del schedule
+    //schedule
+    function reSch(projectId_sch){
         $.ajax({
             type: 'post', 
             dataType: "json",
@@ -323,14 +384,21 @@ $(document).ready(function(){
                             detail: val,
                         },
                         success: function (data) {  
-                            console.log(data)     
+                            if(data == true){
+                                reSch(projectId_sch)
+                            }    
                         },
                     })
                     //Remove event from text input
-                    $('#new-event').val('')
+                    
                 })  
             },
         })
+    }
+    $(document).on('click','.btn-schedule',function(){
+        projectId_sch = $(this).attr('proId')
+        reSch(projectId_sch)
+
     })
     //schedule end
     /// Edit Profile
