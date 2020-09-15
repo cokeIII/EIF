@@ -139,6 +139,46 @@ $(document).ready(function(){
             },
         })
     })
+    function reCheckQua(proName,proId){
+        $.ajax({
+            type: 'post', 
+            dataType: "json",
+            url: 'pages/project/listCheckQua.php',
+            data: {
+                checkQua:true, 
+                projectName: proName,
+                proId: proId
+            },
+            success: function (data) {
+                $('#mainContent').html(data)
+                $("#tablelistCheckQua").dataTable()        
+            },
+        })
+    }
+    $(document).on('click','.btn-check-indicator',function(){
+        proName = $(this).attr("proName")
+        proId = $(this).attr("proId")
+        reCheckQua(proName,proId)
+    })
+    // qua check
+    $(document).on('click','.btn-qua-check',function(){
+        $.ajax({
+            type: 'post', 
+            dataType: "json",
+            url: 'pages/project/dbCheckQua.php',
+            data: {
+                updateCheck:true, 
+                qua_check: $(this).attr("val"),
+                qua_id: $(this).attr("proId")
+            },
+            success: function (data) {
+                if(data){
+                    reCheckQua(proName,proId)
+                }
+            },
+        })
+    })
+    // end qua check
     let projectId_sch = ''
     ///del schedule
     $(document).on('click','.btn-delSch',function(){

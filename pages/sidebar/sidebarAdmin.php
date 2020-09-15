@@ -35,10 +35,9 @@
         <li class="nav-item" id="indicatorMenu">
           <a href="#" class="nav-link active" >
             <i class="far fa-circle nav-icon"></i>
-            <p>กำหนดตัวชี้วัดโครงการ</p>
+            <p>กำหนดและประเมินตัวชี้วัด</p>
           </a>
         </li>
-
       </ul>
     </li>
     <li class="nav-item has-treeview menu-open">

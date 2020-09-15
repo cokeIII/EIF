@@ -15,7 +15,7 @@
         <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-8">
-            <h1 class="m-0 text-dark">กำหนดตัวชี้วัด ประจำไตรมาสที่ '.$yearQuarter.' ปี '.date("Y").'</h1>
+            <h1 class="m-0 text-dark">กำหนดและประเมินตัวชี้วัด ประจำไตรมาสที่ '.$yearQuarter.' ปี '.date("Y").'</h1>
             </div><!-- /.col -->
             <div class="col-sm-4">
             <ol class="breadcrumb float-sm-right">
@@ -78,6 +78,11 @@
                                         <i class="fas fa-tasks">
                                         </i>
                                         กำหนดตัวชี้วัด
+                                    </a>
+                                    <a class="btn btn-success btn-sm  mt-3 btn-check-indicator" href="#"  proName="'.$row["project_name"].'" proId="'.$row["project_id"].'">
+                                        <i class="fas fa-tasks">
+                                        </i>
+                                        ประเมินตัวชี้วัด
                                     </a>
                                 </td>
                             </tr>

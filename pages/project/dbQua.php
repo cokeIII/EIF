@@ -15,13 +15,15 @@
             topic,
             detail,
             status,
-            quater
+            quater,
+            qua_check
             ) values(
             '$project_id',
             '$topic',
             '$detail',
             'สรุปโครงการ_user',
-            '$yearQuarter'
+            '$yearQuarter',
+            '2'
         )";
 
         $sqlSelect = "select id,project_id,quater,quater_year from quarter_progress where project_id='$project_id' and quater='$yearQuarter' and quater_year='$Y'";

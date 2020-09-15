@@ -24,14 +24,16 @@
             detail,
             status,
             quater,
-            file_name
+            file_name,
+            qua_check
         ) values(
             '$project_id',
             '$topic',
             '$detail',
             'รายงานปัญหา',
             '$yearQuarter',
-            '$final_files'
+            '$final_files',
+            '0'
         )";
         if ($conn->query($sql) === TRUE) {
             echo json_encode(true);
