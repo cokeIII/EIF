@@ -78,10 +78,15 @@ $jsonData.='<div class="content-header">
                                        
                                     $jsonData.='</td>
                                     <td class="project-actions text-center">
-                                        <a class="btn btn-info btn-sm btn-report" val="'.$row["project_id"].'">
+                                        <a class="btn btn-info btn-sm btn-report mt-3" val="'.$row["project_id"].'">
                                             <i class="fas fa-paste">
                                             </i>
                                             ดูรายงาน
+                                        </a>
+                                        <a class="btn btn-info btn-sm btn-timeLine mt-3" val="'.$row["project_id"].'">
+                                            <i class="fas fa-chart-line">
+                                            </i>
+                                            ดูเส้นเวลา
                                         </a>
                                     </td>
                                 </tr>';

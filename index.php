@@ -311,6 +311,7 @@
 <script src="dist/js/adminlte.js"></script>
 <script src="dist/js/pages/index.js"></script>
 <script src="dist/js/jquery.autocomplete.js"></script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 </body>
 </html>
 <script>
@@ -449,8 +450,6 @@ function getMaxProgress(name){
       url: 'dist/ajax.php',
       data: {getProgress: true, project_name : name},
       success: function (data) {
-        console.log(data)
-
         let labelData = []
         let dataProgress = []
         $.each(data, function( index, value ) {

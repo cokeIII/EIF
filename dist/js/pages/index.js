@@ -139,6 +139,81 @@ $(document).ready(function(){
             },
         })
     })
+    $(document).on('click','.btn-timeLine',function(){
+        let proId = $(this).attr("val");
+        $.ajax({
+            type: 'post', 
+            dataType: "json",
+            url: 'pages/report/timeLine.php',
+            data: {},
+            success: function (data) {
+                $('#mainContent').html(data)   
+                $.ajax({
+                    type: 'post', 
+                    dataType: "json",
+                    url: 'dist/ajax.php',
+                    data: {getSchData:true,projectId:proId },
+                    success: function (dataSch) {
+                        console.log(dataSch)
+                        let SchData = []
+                        let itemsProcessed = 0
+                        let newDateS 
+                        let newDateE 
+                        var chart 
+                        let itemSize = dataSch.sch.length + dataSch.indicator.length + dataSch.ticket.length
+                        $.each(dataSch.indicator, function( key, value ) {
+                            itemsProcessed++
+                            SchData.push(['ตัวชี้วัด',value.topic,new Date(value.qua_date),new Date(value.qua_date)])
+                            drawTimeline(itemsProcessed)
+                        });
+                        $.each(dataSch.ticket, function( key, value ) {
+                            itemsProcessed++
+                            SchData.push(['ปัญหา',value.topic,new Date(value.qua_date),new Date(value.qua_date)])
+                            drawTimeline(itemsProcessed)
+                        });
+
+                        $.each(dataSch.sch, function( key, value ) {
+                            newDateS = value.start_date.split("-")
+                            newDateE = value.end_date.split("-")
+                            SchData.push(['กำหนดการ',value.detail,new Date(newDateS[0],newDateS[1],newDateS[2]),new Date(newDateE[0],newDateE[1],newDateE[2])])
+                            itemsProcessed++
+                            drawTimeline(itemsProcessed)
+                        });
+                        function drawTimeline(process){
+                            if(process == itemSize){
+                                google.charts.load('current', {'packages':['timeline']});
+                                google.charts.setOnLoadCallback(drawChart);
+                            }
+                        }
+                        console.log(SchData)
+                        
+                        function drawChart() {
+                            var container = document.getElementById('timeline');
+                            chart = new google.visualization.Timeline(container);
+                            var dataTable = new google.visualization.DataTable();
+
+                            dataTable.addColumn({ type: 'string', id: 'President' });
+                            dataTable.addColumn({ type: 'string', id: 'Detail' });
+                            dataTable.addColumn({ type: 'date', id: 'Start' });
+                            dataTable.addColumn({ type: 'date', id: 'End' });
+                            dataTable.addRows(
+                                SchData,
+                            );
+
+                            chart.draw(dataTable);
+                            google.visualization.events.addListener(chart, 'select', myClickHandler);
+                        }
+                        function myClickHandler(){
+                            var selection = chart.getSelection()
+                            let dataRow = SchData[selection[0].row]
+                            var myDateS = new Date(dataRow[2])
+                            $("#topicTimeline").html(myDateS.toLocaleString())
+                        }
+                    },
+                })   
+            },
+        })
+    })
     function reCheckQua(proName,proId){
         $.ajax({
             type: 'post', 
@@ -664,6 +739,7 @@ $(document).ready(function(){
     /// End approve
     /// approve
     $(document).on("click",".viewProject",function(){
+        let proId = $(this).attr("val")
         $.ajax({
             type: 'post', 
             dataType: "json",
@@ -682,10 +758,51 @@ $(document).ready(function(){
                 var Calendar = FullCalendar.Calendar;
                 
                 var calendarEl = document.getElementById('calendar');
+                
                 let i = 0,dateData=[];
+                $.ajax({
+                    type: 'post', 
+                    dataType: "json",
+                    url: 'dist/ajax.php',
+                    data: {
+                        getSchData:true, 
+                        projectId: proId,
+                    },
+                    success: function (data) {
+                        console.log(data)
+                        $.each(data,function(index,value){
+                            console.log(value.start_date)
+                            let newDateS = value.start_date.split('-')
+                            let newDateE = value.end_date.split('-')
+                            $("#dateDetail").append("<p> "+value.detail+" : "+newDateS[2]+"/"+newDateS[1]+"/"+newDateS[0]+" - "+newDateE[2]+"/"+newDateE[1]+"/"+newDateE[0]+"</p>")
+                            dateData[i]={
+                                title          : value.detail,
+                                start          : new Date(newDateS[0], newDateS[1]-1,newDateS[2]),
+                                end            : new Date(newDateE[0], newDateE[1]-1,newDateE[2]),
+                                allDay         : false,
+                                backgroundColor: '#0073b7', //Blue
+                                borderColor    : '#0073b7' //Blue
+                            }
+                            i++
+                        })
+                        var calendar = new Calendar(calendarEl, {
+                            plugins: [ 'bootstrap', 'interaction', 'dayGrid', 'timeGrid' ],
+                            header    : {
+                                left  : 'prev,next today',
+                                center: 'title',
+                                right : ''
+                            },
+                            'themeSystem': 'bootstrap',
+                            //Random default events
+                            events    : dateData,
+                        });
+                        calendar.render();
+                    }
+                })
+
                 $.each(data.calendar,function(index,value){
                     let newDate = value.split('-')
-
+                    
                     if(index == "start_duration"){
                         $("#dateDetail").append('<p>วันเริ่มโครงการ : '+newDate[2]+"/"+newDate[1]+"/"+newDate[0]+"</p>")
                         dateData[i]={
@@ -708,19 +825,9 @@ $(document).ready(function(){
                     i++
                 })
                 
-                var calendar = new Calendar(calendarEl, {
-                    plugins: [ 'bootstrap', 'interaction', 'dayGrid', 'timeGrid' ],
-                    header    : {
-                        left  : 'prev,next today',
-                        center: 'title',
-                        right : ''
-                    },
-                    'themeSystem': 'bootstrap',
-                    //Random default events
-                    events    : dateData,
-                });
 
-                calendar.render();
+
+                
 
             },
         })

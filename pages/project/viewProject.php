@@ -14,6 +14,7 @@
     } 
 
     $result = $conn->query($sql);
+    
     $jsonData["content"] = "";
     $jsonData["content"].='<div class="content-header">
         <div class="container-fluid">
@@ -140,9 +141,10 @@
                     </div>
 
                 ';
+
                         $jsonData["calendar"] = [
                             "start_duration" => $row["start_duration"],
-                            "end_duration" => $row["end_duration"]
+                            "end_duration" => $row["end_duration"],
                         ];
                     
                     }

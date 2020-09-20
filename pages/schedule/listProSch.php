@@ -78,7 +78,7 @@ $jsonData.=
                                        
                                     $jsonData.='</td>
                                     <td class="project-actions text-center">';
-                                        if(isset($_SESSION["status"]) && $_SESSION["status"]!="admin"){
+                                        if(isset($_SESSION["status"])){
                                             $jsonData.='<a class="btn btn-warning btn-sm btn-schedule mt-3" href="#"   proName="'.$row["project_name"].'" proId="'.$row["project_id"].'">
                                                 <i class="fas fa-calendar-check">
                                                 </i>

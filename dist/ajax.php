@@ -171,4 +171,88 @@
         }        
         echo json_encode($json_result);
     }
+    if(isset($_POST["getSchData"])){
+        $projectId = $_POST["projectId"];
+        $sqlSch = "select  * from schedule where project_id = '$projectId' and start_date != '0000-00-00' and end_date !='0000-00-00'";
+        $resultSch = $conn->query($sqlSch);
+        $jsonData['sch'] = [];
+        $jsonData['ticket'] = [];
+        $jsonData['indicator'] = [];
+        
+        if ($resultSch->num_rows > 0) {
+            while($rowSch = $resultSch->fetch_assoc()){
+                $jsonData['sch'][] = [
+                    "sch_id"=>$rowSch["sch_id"],
+                    "project_id"=>$rowSch["project_id"],
+                    "detail"=>$rowSch["detail"],
+                    "start_date"=>$rowSch["start_date"],
+                    "end_date"=>$rowSch["end_date"]
+                ];
+            }
+        }
+        $sqlTicket = "select  topic,detail,quater,qua_date,qua_check from quarter_project where project_id = '$projectId' and status = 'รายงานปัญหา'";
+        $resultTicket = $conn->query($sqlTicket);
+        if ($resultTicket->num_rows > 0) {
+            while($rowTicket = $resultTicket->fetch_assoc()){
+                $jsonData['ticket'][] = [
+                    "topic"=>$rowTicket["topic"],
+                    "detail"=>$rowTicket["detail"],
+                    "quater"=>$rowTicket["quater"],
+                    "qua_date"=>$rowTicket["qua_date"],
+                    "qua_check"=>$rowTicket["qua_check"]
+                ];
+            }
+        }
+        $sqlIndicator = "select  topic,detail,quater,qua_date,qua_check from quarter_project where project_id = '$projectId' and status != 'รายงานปัญหา'";
+        $resultIndicator = $conn->query($sqlIndicator);
+        if ($resultIndicator->num_rows > 0) {
+            while($rowIndicator = $resultIndicator->fetch_assoc()){
+                $jsonData['indicator'][] = [
+                    "topic"=>$rowIndicator["topic"],
+                    "detail"=>$rowIndicator["detail"],
+                    "quater"=>$rowIndicator["quater"],
+                    "qua_date"=>$rowIndicator["qua_date"],
+                    "qua_check"=>$rowIndicator["qua_check"]
+                ];
+            }
+        }
+
+
+        echo json_encode($jsonData);
+    }
+    if(isset($_POST["getTicket"])){
+        $projectId = $_POST["projectId"];
+        $sqlSch = "select  topic,detail,quater,qua_date,qua_check from quarter_project where project_id = '$projectId' and status = 'รายงานปัญหา'";
+        $resultSch = $conn->query($sqlSch);
+        if ($resultSch->num_rows > 0) {
+            while($rowSch = $resultSch->fetch_assoc()){
+                $jsonData[] = [
+                    "topic"=>$rowSch["topic"],
+                    "detail"=>$rowSch["detail"],
+                    "quater"=>$rowSch["quater"],
+                    "qua_date"=>$rowSch["qua_date"],
+                    "qua_check"=>$rowSch["qua_check"]
+                ];
+            }
+        }
+        echo json_encode($jsonData);
+    }
+    if(isset($_POST["getIndicator"])){
+        $projectId = $_POST["projectId"];
+        $sqlSch = "select  topic,detail,quater,qua_date,qua_check from quarter_project where project_id = '$projectId' and status = 'สรุปโครงการ_user' or status = 'สรุปโครงการ'";
+        $resultSch = $conn->query($sqlSch);
+        if ($resultSch->num_rows > 0) {
+            while($rowSch = $resultSch->fetch_assoc()){
+                $jsonData[] = [
+                    "topic"=>$rowSch["topic"],
+                    "detail"=>$rowSch["detail"],
+                    "quater"=>$rowSch["quater"],
+                    "qua_date"=>$rowSch["qua_date"],
+                    "qua_check"=>$rowSch["qua_check"]
+                ];
+            }
+        }
+        echo json_encode($jsonData);
+    }
+
 ?>
