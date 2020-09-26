@@ -30,10 +30,11 @@ $jsonData.='<div class="content-header">
                     <div class="card-body">
                         <div id="timeline" style="height: 180px;"></div>
                         <hr class="hr">
-                        <h2 id="topicTimeline"><h2>
+                        <h3 id="topicTimeline"></h3>
                         <div id="datailTimeline"></div>
                         <div id="startTimeline"></div>
                         <div id="endTimeline"></div>
+                        <div id="statusTimeline"></div>
                     </div>
                 </div>
             </div>

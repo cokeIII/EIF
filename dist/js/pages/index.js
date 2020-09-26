@@ -139,6 +139,17 @@ $(document).ready(function(){
             },
         })
     })
+    function quaCheck(check){
+        let res
+        if(check == 0){
+            res = "ไม่ผ่าน"
+        } else if(check == 1){
+            res = "ผ่าน"
+        } else if(check == 2){
+            res = "รอการประเมิน"
+        }
+        return res
+    }
     $(document).on('click','.btn-timeLine',function(){
         let proId = $(this).attr("val");
         $.ajax({
@@ -154,8 +165,8 @@ $(document).ready(function(){
                     url: 'dist/ajax.php',
                     data: {getSchData:true,projectId:proId },
                     success: function (dataSch) {
-                        console.log(dataSch)
                         let SchData = []
+                        let showData = []
                         let itemsProcessed = 0
                         let newDateS 
                         let newDateE 
@@ -164,11 +175,13 @@ $(document).ready(function(){
                         $.each(dataSch.indicator, function( key, value ) {
                             itemsProcessed++
                             SchData.push(['ตัวชี้วัด',value.topic,new Date(value.qua_date),new Date(value.qua_date)])
+                            showData.push(['ตัวชี้วัด',value.topic,new Date(value.qua_date),new Date(value.qua_date),quaCheck(value.qua_check)])
                             drawTimeline(itemsProcessed)
                         });
                         $.each(dataSch.ticket, function( key, value ) {
                             itemsProcessed++
                             SchData.push(['ปัญหา',value.topic,new Date(value.qua_date),new Date(value.qua_date)])
+                            showData.push(['ปัญหา',value.topic,new Date(value.qua_date),new Date(value.qua_date)])
                             drawTimeline(itemsProcessed)
                         });
 
@@ -176,6 +189,7 @@ $(document).ready(function(){
                             newDateS = value.start_date.split("-")
                             newDateE = value.end_date.split("-")
                             SchData.push(['กำหนดการ',value.detail,new Date(newDateS[0],newDateS[1],newDateS[2]),new Date(newDateE[0],newDateE[1],newDateE[2])])
+                            showData.push(['กำหนดการ',value.detail,new Date(newDateS[0],newDateS[1],newDateS[2]),new Date(newDateE[0],newDateE[1],newDateE[2])])
                             itemsProcessed++
                             drawTimeline(itemsProcessed)
                         });
@@ -185,7 +199,6 @@ $(document).ready(function(){
                                 google.charts.setOnLoadCallback(drawChart);
                             }
                         }
-                        console.log(SchData)
                         
                         function drawChart() {
                             var container = document.getElementById('timeline');
@@ -204,10 +217,22 @@ $(document).ready(function(){
                             google.visualization.events.addListener(chart, 'select', myClickHandler);
                         }
                         function myClickHandler(){
+                            
                             var selection = chart.getSelection()
-                            let dataRow = SchData[selection[0].row]
+                            let dataRow = showData[selection[0].row]
+                            console.log(dataRow)
                             var myDateS = new Date(dataRow[2])
-                            $("#topicTimeline").html(myDateS.toLocaleString())
+                            var myDateE = new Date(dataRow[3])
+                            $("#topicTimeline").html(dataRow[0])
+                            $("#datailTimeline").html("<h5>รายละเอียด : </h5>"+dataRow[1])
+                            $("#startTimeline").html("<h5>วันเริ่ม : </h5>"+myDateS.toLocaleString())
+                            $("#endTimeline").html("<h5>วันสิ้นสุด : </h5>"+myDateE.toLocaleString())
+                            if(dataRow[4]){
+                                $("#statusTimeline").html("<h5>สถานะ : </h5>"+dataRow[4])
+                            } else {
+                                $("#statusTimeline").html("")
+                            }
+                                
                         }
                     },
                 })   
