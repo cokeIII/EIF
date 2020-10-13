@@ -24,7 +24,9 @@
     if(isset($_POST['updateDate'])){
         $dateStr = $_POST['dateStr'];
         $eventId = $_POST['eventId'];
-        $sql = "update schedule set start_date = '$dateStr', end_date = '$dateStr' where sch_id = '$eventId'";
+        $exDate = explode("-",$dateStr);
+        $endDate = $exDate[0]."-".$exDate[1]."-".((int)$exDate[2]+1);
+        $sql = "update schedule set start_date = '$dateStr', end_date = '$endDate' where sch_id = '$eventId'";
         if ($conn->query($sql) === TRUE) {
             echo json_encode(true);
         } else {
@@ -49,8 +51,29 @@
         } 
         echo json_encode($json_result);
     }
+    if(isset($_POST['getSchId'])){
+        $proId = $_POST["proId"];
+        $sql="select * from schedule where start_date != '0000-00-00' and project_id = '$proId'";
+        $result = $conn->query($sql);
+
+        if ($result->num_rows > 0) {
+            while($row = $result->fetch_assoc()) {
+
+                $json_result[] = [
+                    'title'=>$row['detail'],
+                    'start'=>$row['start_date'],
+                    'end'=>$row['end_date'],
+                    'id'=>$row['sch_id'],
+                ];
+
+            }
+        } else {
+            $json_result = []; 
+        }
+        echo json_encode($json_result);
+    }
     if(isset($_POST['updateEndDate'])){
-        $dateStr = $_POST['startDate'];
+        $dateStr = $_POST['dateStr'];
         $eventId = $_POST['eventId'];
         $sql = "update schedule set end_date = DATE_ADD(end_date,INTERVAL $dateStr DAY) where sch_id = '$eventId'";
         if ($conn->query($sql) === TRUE) {

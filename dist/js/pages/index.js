@@ -188,8 +188,8 @@ $(document).ready(function(){
                         $.each(dataSch.sch, function( key, value ) {
                             newDateS = value.start_date.split("-")
                             newDateE = value.end_date.split("-")
-                            SchData.push(['กำหนดการ',value.detail,new Date(newDateS[0],newDateS[1],newDateS[2]),new Date(newDateE[0],newDateE[1],newDateE[2])])
-                            showData.push(['กำหนดการ',value.detail,new Date(newDateS[0],newDateS[1],newDateS[2]),new Date(newDateE[0],newDateE[1],newDateE[2])])
+                            SchData.push(['กำหนดการ',value.detail,new Date(value.start_date),new Date(value.end_date)])
+                            showData.push(['กำหนดการ',value.detail,new Date(value.start_date),new Date(value.end_date)])
                             itemsProcessed++
                             drawTimeline(itemsProcessed)
                         });
@@ -420,125 +420,120 @@ $(document).ready(function(){
                     type: 'post', 
                     dataType: "json",
                     url: 'pages/schedule/dbSchedule.php',
-                    data: {getSch: true},
+                    data: {getSchId: true, proId:projectId_sch},
                     success: function (data) {
-                        if(data){
-                            console.log(data)
-                            var calendar = new CalendarSchedule(calendarEl, {
-                                plugins: [ 'bootstrap', 'interaction', 'dayGrid', 'timeGrid' ],
-                                header    : {
-                                left  : 'prev,next today',
-                                center: 'title',
-                                right : 'dayGridMonth,timeGridWeek,timeGridDay'
-                                },
-                                'themeSystem': 'bootstrap',
-                                timeZone: 'bangkok/asia',
-                                events: data,
-                                editable  : true,
-                                droppable : true, // this allows things to be dropped onto the calendar !!!
-                                drop      : function(info) {
-                                    $.ajax({
-                                        type: 'post', 
-                                        dataType: "json",
-                                        url: 'pages/schedule/dbSchedule.php',
-                                        data: {updateDate: true, dateStr: info.dateStr,eventId: eventId},
-                                        success: function (data) {
-                                            if(data == true){
-                                                reSch(projectId_sch)
-                                                console.log(data)
-                                            } else {
-                                                console.log(data)
-                                            }    
-                                        },
+                        console.log(data)
+                        var calendar = new CalendarSchedule(calendarEl, {
+                            plugins: [ 'bootstrap', 'interaction', 'dayGrid', 'timeGrid' ],
+                            header    : {
+                            left  : 'prev,next today',
+                            center: 'title',
+                            right : 'dayGridMonth,timeGridWeek,timeGridDay'
+                            },
+                            'themeSystem': 'bootstrap',
+                            timeZone: 'asia/bangkok',
+                            events: data,
+                            editable  : true,
+                            droppable : true, // this allows things to be dropped onto the calendar !!!
+                            drop      : function(info) {
+                                $.ajax({
+                                    type: 'post', 
+                                    dataType: "json",
+                                    url: 'pages/schedule/dbSchedule.php',
+                                    data: {updateDate: true, dateStr: info.dateStr,eventId: eventId},
+                                    success: function (data) {
+                                        if(data == true){
+                                            reSch(projectId_sch)
+                                            console.log(data)
+                                        } else {
+                                            console.log(data)
+                                        }    
+                                    },
+                                })
+                            },
+                            eventResize: function(event, delta, revertFunc) {
+                                $.ajax({
+                                    type: 'post', 
+                                    dataType: "json",
+                                    url: 'pages/schedule/dbSchedule.php',
+                                    data: {updateEndDate: true, dateStr: event.endDelta.days,eventId: event.prevEvent.id},
+                                    success: function (data) {
+                                        if(data == true){
+                                            console.log(data)
+                                        } else {
+                                            console.log(data)
+                                        }    
+                                    },
+                                })
+                            }, 
+                            eventDrop: function(event, delta, revertFunc) {
+                                let ed = convertD(event.event.end)
+                                let sd = convertD(event.event.start)
+                                $.ajax({
+                                    type: 'post', 
+                                    dataType: "json",
+                                    url: 'pages/schedule/dbSchedule.php',
+                                    data: {updateMoveDate: true, startDate: sd, endDate: ed, eventId: event.oldEvent.id},
+                                    success: function (data) {
+                                        if(data == true){
+                                            console.log(data)
+                                        } else {
+                                            console.log(data)
+                                        }    
+                                    },
+                                })
+                            }, 
+                            eventClick: function(calEvent, jsEvent, view) {
+                                /**
+                                 * calEvent is the event object, so you can access it's properties
+                                 */
+                                let idSch = calEvent.event.id
+                                const swalWithBootstrapButtons = Swal.mixin({
+                                    customClass: {
+                                        confirmButton: 'btn btn-success ml-2',
+                                        cancelButton: 'btn btn-danger'
+                                    },
+                                    buttonsStyling: false
                                     })
-                                },
-                                eventResize: function(event, delta, revertFunc) {
-                                    console.log(event.prevEvent.id)
-                                    $.ajax({
-                                        type: 'post', 
-                                        dataType: "json",
-                                        url: 'pages/schedule/dbSchedule.php',
-                                        data: {updateEndDate: true, dateStr: event.endDelta.days,eventId: event.prevEvent.id},
-                                        success: function (data) {
-                                            if(data == true){
-                                                console.log(data)
-                                            } else {
-                                                console.log(data)
-                                            }    
-                                        },
-                                    })
-                                }, 
-                                eventDrop: function(event, delta, revertFunc) {
-                                    let ed = convertD(event.event.end)
-                                    let sd = convertD(event.event.start)
-                                    $.ajax({
-                                        type: 'post', 
-                                        dataType: "json",
-                                        url: 'pages/schedule/dbSchedule.php',
-                                        data: {updateMoveDate: true, startDate: sd, endDate: ed, eventId: event.oldEvent.id},
-                                        success: function (data) {
-                                            if(data == true){
-                                                console.log(data)
-                                            } else {
-                                                console.log(data)
-                                            }    
-                                        },
-                                    })
-                                }, 
-                                eventClick: function(calEvent, jsEvent, view) {
-                                    /**
-                                     * calEvent is the event object, so you can access it's properties
-                                     */
-                                    let idSch = calEvent.event.id
-                                    const swalWithBootstrapButtons = Swal.mixin({
-                                        customClass: {
-                                            confirmButton: 'btn btn-success ml-2',
-                                            cancelButton: 'btn btn-danger'
-                                        },
-                                        buttonsStyling: false
+                            
+                                    swalWithBootstrapButtons.fire({
+                                    title: 'ต้องการลบ ใช่ หรือ ไม่ ?',
+                                    text: "",
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonText: 'ลบ',
+                                    cancelButtonText: 'ยกเลิก',
+                                    reverseButtons: true
+                                    }).then((result) => {
+                                    if (result.value) {
+                                        $.ajax({
+                                            type: 'post', 
+                                            dataType: "json",
+                                            url: 'pages/schedule/dbSchedule.php',
+                                            data: {delSch: true, sch_id : idSch},
+                                            success: function (data) {
+                                                if(data == true){
+                                                    console.log(data)
+                                                    reSch(projectId_sch)
+                                                } else {
+                                                    console.log(data)
+                                                }    
+                                            },
                                         })
-                                
-                                        swalWithBootstrapButtons.fire({
-                                        title: 'ต้องการลบ ใช่ หรือ ไม่ ?',
-                                        text: "",
-                                        icon: 'warning',
-                                        showCancelButton: true,
-                                        confirmButtonText: 'ลบ',
-                                        cancelButtonText: 'ยกเลิก',
-                                        reverseButtons: true
-                                        }).then((result) => {
-                                        if (result.value) {
-                                            $.ajax({
-                                                type: 'post', 
-                                                dataType: "json",
-                                                url: 'pages/schedule/dbSchedule.php',
-                                                data: {delSch: true, sch_id : idSch},
-                                                success: function (data) {
-                                                    if(data == true){
-                                                        console.log(data)
-                                                        reSch(projectId_sch)
-                                                    } else {
-                                                        console.log(data)
-                                                    }    
-                                                },
-                                            })
-                                        } else if (
-                                            /* Read more about handling dismissals below */
-                                            result.dismiss === Swal.DismissReason.cancel
-                                        ) {
-                                            swalWithBootstrapButtons.fire(
-                                            'ยกเลิก',
-                                            '',
-                                            'error'
-                                            )
-                                        }
-                                        })
-                                } 
-                            }); 
-                            calendar.render();           
-                        } else {
-                            console.log(data)
-                        }    
+                                    } else if (
+                                        /* Read more about handling dismissals below */
+                                        result.dismiss === Swal.DismissReason.cancel
+                                    ) {
+                                        swalWithBootstrapButtons.fire(
+                                        'ยกเลิก',
+                                        '',
+                                        'error'
+                                        )
+                                    }
+                                    })
+                            } 
+                        }); 
+                        calendar.render();   
                     },
                 })
 
@@ -796,7 +791,9 @@ $(document).ready(function(){
                     success: function (data) {
                         console.log(data)
                         $.each(data,function(index,value){
-                            console.log(value.start_date)
+                            if(!value.start_date && !value.end_date){
+                                return false;
+                            }
                             let newDateS = value.start_date.split('-')
                             let newDateE = value.end_date.split('-')
                             $("#dateDetail").append("<p> "+value.detail+" : "+newDateS[2]+"/"+newDateS[1]+"/"+newDateS[0]+" - "+newDateE[2]+"/"+newDateE[1]+"/"+newDateE[0]+"</p>")

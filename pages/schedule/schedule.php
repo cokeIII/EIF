@@ -11,7 +11,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Calendar</h1>
+            <h1>ตารางเวลา</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -31,7 +31,7 @@
             <div class="sticky-top mb-3">
               <div class="card">
                 <div class="card-header">
-                  <h4 class="card-title">Draggable Events</h4>
+                  <h4 class="card-title">เหตุการณ์</h4>
                 </div>
                 <div class="card-body">
                   <!-- the events -->
@@ -53,7 +53,7 @@
               <!-- /.card -->
               <div class="card">
                 <div class="card-header">
-                  <h3 class="card-title">Create Event</h3>
+                  <h3 class="card-title">สร้างเหตุการณ์</h3>
                 </div>
                 <div class="card-body">
                   <div class="btn-group" style="width: 100%; margin-bottom: 10px;">
@@ -61,10 +61,10 @@
                   </div>
                   <!-- /btn-group -->
                   <div class="input-group">
-                    <input id="new-event" type="text" class="form-control" placeholder="Event Title">
+                    <input id="new-event" type="text" class="form-control" placeholder="ชื่อเหตุการณ์">
 
                     <div class="input-group-append">
-                      <button id="add-new-event" type="button" class="btn btn-primary">Add</button>
+                      <button id="add-new-event" type="button" class="btn btn-primary">เพิ่ม</button>
                     </div>
                     <!-- /btn-group -->
                   </div>
