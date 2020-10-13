@@ -790,10 +790,8 @@ $(document).ready(function(){
                     },
                     success: function (data) {
                         console.log(data)
-                        $.each(data,function(index,value){
-                            if(!value.start_date && !value.end_date){
-                                return false;
-                            }
+                        $.each(data.sch, function( key, value ){
+                            console.log(value)
                             let newDateS = value.start_date.split('-')
                             let newDateE = value.end_date.split('-')
                             $("#dateDetail").append("<p> "+value.detail+" : "+newDateS[2]+"/"+newDateS[1]+"/"+newDateS[0]+" - "+newDateE[2]+"/"+newDateE[1]+"/"+newDateE[0]+"</p>")
@@ -845,12 +843,7 @@ $(document).ready(function(){
                         }
                     }
                     i++
-                })
-                
-
-
-                
-
+                })  
             },
         })
 
